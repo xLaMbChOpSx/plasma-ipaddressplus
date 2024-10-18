@@ -6,11 +6,10 @@
             }
         ],
         "Category": "System Information",
-        "Description": "Affiche l'adresse IP locale et publique",
+        "Description": "IP Address Display for KDE Plasma 6.x",
         "Icon": "network-wired",
-        "Id": "com.example.ipaddress",
         "Name": "IP Address Display",
-        "Version": "1.0"
+        "Version": "0.5.1"
     },
     "KPackageStructure": "Plasma/Applet",
     "X-Plasma-API-Minimum-Version": "6.0",
