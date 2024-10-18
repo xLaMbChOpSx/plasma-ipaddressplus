@@ -34,19 +34,32 @@ PlasmoidItem {
             Layout.alignment: Qt.AlignHCenter
             spacing: 5
             
-            Image {
-                id: flagImage
-                source: countryCode && plasmoid.configuration.showFlag ? 
-                    "https://flagcdn.com/w320/" + countryCode.toLowerCase() + ".png" : ""
-                visible: !showingLocalIP && publicIP !== "" && countryCode !== "" && plasmoid.configuration.showFlag
+            Item {
+                id: flagContainer
                 Layout.preferredWidth: 17
                 Layout.preferredHeight: 17
-                fillMode: Image.PreserveAspectFit
+
+                Image {
+                    id: flagImage
+                    anchors.fill: parent
+                    source: countryCode && shouldShowFlag() ? 
+                        "https://flagcdn.com/w320/" + countryCode.toLowerCase() + ".png" : ""
+                    visible: shouldShowFlag()
+                    fillMode: Image.PreserveAspectFit
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: toggleIPDisplay()
+                }
             }
 
             ColumnLayout {
+                id: ipInfoColumn
                 spacing: 0
                 Layout.alignment: Qt.AlignHCenter
+                visible: !plasmoid.configuration.showFlagOnly || showingLocalIP
 
                 QQC2.Label {
                     id: ipTypeLabel
@@ -64,7 +77,7 @@ PlasmoidItem {
                     Layout.alignment: Qt.AlignHCenter
                     color: {
                         if (publicIP === "" && !showingLocalIP) {
-                            return "#FF0000" // Red in hexadecimal
+                            return "#FF0000" // Rouge en hexadécimal
                         } else {
                             return plasmoid.configuration.textColor || PlasmaCore.ColorScope.textColor
                         }
@@ -74,12 +87,7 @@ PlasmoidItem {
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        showingLocalIP = !showingLocalIP
-                        if (!showingLocalIP) {
-                            getPublicIP()
-                        }
-                    }
+                    onClicked: toggleIPDisplay()
                 }
             }
         }
@@ -136,16 +144,78 @@ PlasmoidItem {
             } else if (cmd.indexOf("ipapi.co") !== -1) {
                 countryCode = stdout.trim()
             }
+            updateDisplay()
         }
     }
 
     Timer {
-        interval: 60000 // Update every 60 seconds
+        interval: 60000 // Mise à jour toutes les 60 secondes
         running: true
         repeat: true
         onTriggered: {
             getLocalIP()
             getPublicIP()
         }
+    }
+
+    function shouldShowFlag() {
+        // Le drapeau ne doit être affiché que si :
+        // - "Afficher uniquement le drapeau" est activé ou "Afficher le drapeau" est activé
+        // - Le pays est identifié (countryCode n'est pas vide)
+        // - L'affichage actuel est l'IP publique (showingLocalIP est faux)
+        return (plasmoid.configuration.showFlagOnly || plasmoid.configuration.showFlag) 
+               && countryCode !== ""
+               && !showingLocalIP
+    }
+
+    function toggleIPDisplay() {
+        // Cas spécial : si "Afficher uniquement le drapeau" est activé et que l'IP publique est affichée
+        if (plasmoid.configuration.showFlagOnly && !showingLocalIP) {
+            showingLocalIP = true
+            getLocalIP()
+        } else {
+            showingLocalIP = !showingLocalIP
+            if (!showingLocalIP) {
+                getPublicIP()
+            } else {
+                getLocalIP()
+            }
+        }
+        updateDisplay()
+    }
+
+    function updateDisplay() {
+        // Vérifier les états des cases à cocher
+        var showFlagOnly = plasmoid.configuration.showFlagOnly
+        var showFlag = plasmoid.configuration.showFlag
+        var showType = plasmoid.configuration.showTypeLabel
+
+        // Définir la visibilité du drapeau
+        flagImage.visible = shouldShowFlag()
+
+        // Définir la visibilité des informations IP
+        ipInfoColumn.visible = !showFlagOnly || showingLocalIP
+
+        // Définir la visibilité du type d'IP
+        ipTypeLabel.visible = showType && (!showFlagOnly || showingLocalIP)
+
+        // Actualiser le texte de l'IP en fonction de l'état
+        if (showFlagOnly && !showingLocalIP) {
+            ipAddressLabel.text = ""
+        } else {
+            ipAddressLabel.text = showingLocalIP ? localIP :
+                (publicIP !== "" ? publicIP : Translations.getTranslation("notConnected", currentLocale))
+        }
+
+        // Rafraîchir l'affichage
+        contentLayout.forceLayout()
+    }
+
+    // Connexions pour surveiller les changements de configuration
+    Connections {
+        target: plasmoid.configuration
+        onShowFlagOnlyChanged: updateDisplay()
+        onShowFlagChanged: updateDisplay()
+        onShowTypeLabelChanged: updateDisplay()
     }
 }

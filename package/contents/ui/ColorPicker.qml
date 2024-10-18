@@ -18,20 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
+// Import necessary Qt modules
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Dialogs as QtDialogs
 import Qt.labs.platform
 
+// Main component for the color picker
 Item {
     id: colorPicker
 
+    // Property to store the chosen color
     property alias chosenColor: colorDialog.color
 
+    // Set the size of the color picker
     width: childrenRect.width
     height: childrenRect.height
     Layout.alignment: Qt.AlignVCenter
 
+    // Rectangle to display the chosen color
     Rectangle {
         color: colorDialog.color
         radius: width / 2
@@ -43,11 +48,13 @@ Item {
             color: Qt.darker(colorDialog.color, 1.5)
         }
 
+        // Color dialog for selecting a new color
         ColorDialog {
             id: colorDialog
         }
     }
 
+    // Mouse area to handle clicks on the color picker
     MouseArea {
         id: mouseArea
         anchors.fill: parent
