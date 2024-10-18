@@ -1,0 +1,20 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Jennova"
+            }
+        ],
+        "Category": "System Information",
+        "Description": "Affiche l'adresse IP locale et publique",
+        "Icon": "network-wired",
+        "Id": "com.example.ipaddress",
+        "Name": "IP Address Display",
+        "Version": "1.0"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-ConfigPlugins": ["configuration"],
+    "X-Plasma-ConfigModule": "kcm_ipaddress"
+}
