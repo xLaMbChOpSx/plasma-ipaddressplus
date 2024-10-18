@@ -4,13 +4,15 @@ This addon allows you to easily view your local and public IP addresses directly
 
 ## Installation
 
-### Method 1: Via KDE System Settings (Recommended)
+### Method 1: Via KDE Taskbar (Recommended)
 
-1. Open KDE System Settings.
-2. Navigate to "Appearance" > "Plasma Style".
-3. Click on "Get New Plasma Styles".
-4. Search for "IP Address Display" and click "Install".
-5. Once installed, you can add the widget to your desktop or panel.
+1. Right-click on your taskbar.
+2. Select "Add or Manage Graphical Components...".
+3. Click on "Get New...".
+4. Click on "Download New Graphical Components".
+5. Click on the magnifying glass icon and type "IP Address".
+6. Find "IP Address Display" in the list and click "Install".
+7. Once installed, you can add the widget to your desktop or panel.
 
 ### Method 2: Manual Installation
 
@@ -29,13 +31,13 @@ This addon allows you to easily view your local and public IP addresses directly
 You can also install it via the command line:
 
 ```bash
-plasmapkg2 -i path/to/your-addon.plasmoid
+plasmapkg2 -i path/to/ipaddress.zip
 ```
 
 To update an existing installation:
 
 ```bash
-plasmapkg2 -u path/to/your-addon.plasmoid
+plasmapkg2 -u path/to/ipaddress.zip
 ```
 
 ## Usage
@@ -60,13 +62,15 @@ Cet addon vous permet de visualiser facilement vos adresses IP locales et publiq
 
 ## Installation
 
-### Méthode 1 : Via les Paramètres système de KDE (Recommandée)
+### Méthode 1 : Via la barre des tâches KDE (Recommandée)
 
-1. Ouvrez les Paramètres système de KDE.
-2. Allez dans "Apparence" > "Style Plasma".
-3. Cliquez sur "Obtenir de nouveaux styles Plasma".
-4. Recherchez "Affichage des Adresses IP" et cliquez sur "Installer".
-5. Une fois installé, vous pouvez ajouter le widget à votre bureau ou panneau.
+1. Faites un clic droit sur votre barre des tâches.
+2. Sélectionnez "Ajouter ou gérer des composants graphiques...".
+3. Cliquez sur "Obtenir un nouveau...".
+4. Cliquez sur "Télécharger de nouveaux composants graphiques".
+5. Cliquez sur l'icône de la loupe et écrivez "IP Address".
+6. Trouvez "Affichage des Adresses IP" dans la liste et cliquez sur "Installer".
+7. Une fois installé, vous pouvez ajouter le widget à votre bureau ou panneau.
 
 ### Méthode 2 : Installation manuelle
 
@@ -85,13 +89,13 @@ Cet addon vous permet de visualiser facilement vos adresses IP locales et publiq
 Vous pouvez également l'installer via la ligne de commande :
 
 ```bash
-plasmapkg2 -i chemin/vers/votre-addon.plasmoid
+plasmapkg2 -i chemin/vers/ipaddress.zip
 ```
 
 Pour mettre à jour une installation existante :
 
 ```bash
-plasmapkg2 -u chemin/vers/votre-addon.plasmoid
+plasmapkg2 -u chemin/vers/ipaddress.zip
 ```
 
 ## Utilisation
