@@ -77,7 +77,7 @@ PlasmoidItem {
                     Layout.alignment: Qt.AlignHCenter
                     color: {
                         if (publicIP === "" && !showingLocalIP) {
-                            return "#FF0000" // Rouge en hexadécimal
+                            return "#FF0000"
                         } else {
                             return plasmoid.configuration.textColor || PlasmaCore.ColorScope.textColor
                         }
@@ -93,44 +93,58 @@ PlasmoidItem {
         }
     }
 
+    // Définition de la source de données pour exécuter des commandes
     P5Support.DataSource {
         id: executable
         engine: "executable"
         connectedSources: []
+        
+        // Gestion des nouvelles données reçues après l'exécution d'une commande
         onNewData: {
             var stdout = data["stdout"]
             var stderr = data["stderr"]
             exited(sourceName, stdout, stderr)
             disconnectSource(sourceName)
         }
+        
+        // Fonction pour exécuter une commande
         function exec(cmd) {
             connectSource(cmd)
         }
+        
+        // Signal émis lorsque la commande est terminée
         signal exited(string cmd, string stdout, string stderr)
     }
 
+    // Initialisation des adresses IP lors du chargement du composant
     Component.onCompleted: {
         getLocalIP()
         getPublicIP()
     }
 
+    // Fonction pour obtenir l'adresse IP locale
     function getLocalIP() {
         executable.exec("ip -4 addr show scope global | grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1")
     }
 
+    // Fonction pour obtenir l'adresse IP publique
     function getPublicIP() {
         executable.exec("curl -s https://api.ipify.org")
     }
 
+    // Fonction pour obtenir le code du pays basé sur l'IP publique
     function getCountryCode() {
         executable.exec("curl -s https://ipapi.co/" + publicIP + "/country")
     }
 
+    // Connexions pour surveiller les sorties des commandes exécutées
     Connections {
         target: executable
         function onExited(cmd, stdout, stderr) {
+            // Si la commande est pour obtenir l'IP locale
             if (cmd.indexOf("ip -4 addr") !== -1) {
                 localIP = stdout.trim()
+            // Si la commande est pour obtenir l'IP publique
             } else if (cmd.indexOf("ipify.org") !== -1) {
                 if (stderr === "") {
                     publicIP = stdout.trim()
@@ -141,6 +155,7 @@ PlasmoidItem {
                     publicIP = ""
                     countryCode = ""
                 }
+            // Si la commande est pour obtenir le code du pays
             } else if (cmd.indexOf("ipapi.co") !== -1) {
                 countryCode = stdout.trim()
             }
@@ -148,8 +163,9 @@ PlasmoidItem {
         }
     }
 
+    // Timer pour mettre à jour les adresses IP toutes les 5 secondes
     Timer {
-        interval: 60000 // Mise à jour toutes les 60 secondes
+        interval: 5000
         running: true
         repeat: true
         onTriggered: {
@@ -164,8 +180,8 @@ PlasmoidItem {
         // - Le pays est identifié (countryCode n'est pas vide)
         // - L'affichage actuel est l'IP publique (showingLocalIP est faux)
         return (plasmoid.configuration.showFlagOnly || plasmoid.configuration.showFlag) 
-               && countryCode !== ""
-               && !showingLocalIP
+                && countryCode !== ""
+                && !showingLocalIP
     }
 
     function toggleIPDisplay() {
