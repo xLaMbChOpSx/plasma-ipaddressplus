@@ -1,3 +1,11 @@
+/**
+ * IP Address Display Plasmoid
+ * Purpose: Displays local and public IP addresses with country flags in Plasma panel
+ * Operation: Fetches and displays IP information with automatic updates
+ * Usage: Helps users monitor their network connectivity and location
+ * Interactions: Responds to user clicks and system network changes
+ */
+
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import org.kde.plasma.core as PlasmaCore
@@ -8,62 +16,354 @@ import QtQuick.Controls 2.15 as QQC2
 import org.kde.kirigami 2.20 as Kirigami
 import "../translations/translations.js" as Translations
 
+/**
+ * Main Plasmoid Container
+ * Purpose: Root container managing the entire widget's state and appearance
+ * Operation: Coordinates data fetching, display updates, and user interactions
+ * Usage: Provides the foundation for all widget components
+ * Interactions: Manages communication between UI and data components
+ */
 PlasmoidItem {
     id: root
 
-    property string currentLocale: {
-        var locale = Qt.locale().name.split("_")[0];
-        return Translations.translations.hasOwnProperty(locale) ? locale : "en";
-    }
+    /**
+     * Core Properties
+     * Purpose: Define essential state variables for the widget
+     * Operation: Maintain current state of IPs, loading states, and display modes
+     * Usage: Referenced throughout the widget for state management
+     * Interactions: Updated by various functions and user actions
+     */
+    readonly property string currentLocale: Qt.locale().name.split("_")[0]
+    property bool isPublicMode: false
+    property bool isLoadingIP: false
+    property bool isLoadingCountry: false
     property string localIP: Translations.getTranslation("loading", currentLocale)
     property string publicIP: ""
+    property string publicIP_OLD: ""
     property string countryCode: ""
     property bool showingLocalIP: true
+    readonly property bool debugMode: false
+    readonly property string flagsPath: "../images/pays/"
 
+    /**
+    * Country Names Mapping
+    * Purpose: Maps country codes to their full names
+    * Operation: Used for tooltip display when hovering over flags
+    */
+    readonly property var countryNames: ({
+        "af": "Afghanistan",
+        "ax": "Åland Islands",
+        "al": "Albania",
+        "dz": "Algeria",
+        "as": "American Samoa",
+        "ad": "Andorra",
+        "ao": "Angola",
+        "ai": "Anguilla",
+        "aq": "Antarctica",
+        "ag": "Antigua and Barbuda",
+        "ar": "Argentina",
+        "am": "Armenia",
+        "aw": "Aruba",
+        "au": "Australia",
+        "at": "Austria",
+        "az": "Azerbaijan",
+        "bs": "Bahamas",
+        "bh": "Bahrain",
+        "bd": "Bangladesh",
+        "bb": "Barbados",
+        "by": "Belarus",
+        "be": "Belgium",
+        "bz": "Belize",
+        "bj": "Benin",
+        "bm": "Bermuda",
+        "bt": "Bhutan",
+        "bo": "Bolivia",
+        "ba": "Bosnia and Herzegovina",
+        "bw": "Botswana",
+        "br": "Brazil",
+        "bn": "Brunei",
+        "bg": "Bulgaria",
+        "bf": "Burkina Faso",
+        "bi": "Burundi",
+        "kh": "Cambodia",
+        "cm": "Cameroon",
+        "ca": "Canada",
+        "cv": "Cape Verde",
+        "ky": "Cayman Islands",
+        "cf": "Central African Republic",
+        "td": "Chad",
+        "cl": "Chile",
+        "cn": "China",
+        "co": "Colombia",
+        "km": "Comoros",
+        "cg": "Congo",
+        "cd": "Congo, Democratic Republic",
+        "ck": "Cook Islands",
+        "cr": "Costa Rica",
+        "ci": "Côte d'Ivoire",
+        "hr": "Croatia",
+        "cu": "Cuba",
+        "cy": "Cyprus",
+        "cz": "Czech Republic",
+        "dk": "Denmark",
+        "dj": "Djibouti",
+        "dm": "Dominica",
+        "do": "Dominican Republic",
+        "ec": "Ecuador",
+        "eg": "Egypt",
+        "sv": "El Salvador",
+        "gq": "Equatorial Guinea",
+        "er": "Eritrea",
+        "ee": "Estonia",
+        "et": "Ethiopia",
+        "fk": "Falkland Islands",
+        "fo": "Faroe Islands",
+        "fj": "Fiji",
+        "fi": "Finland",
+        "fr": "France",
+        "gf": "French Guiana",
+        "pf": "French Polynesia",
+        "ga": "Gabon",
+        "gm": "Gambia",
+        "ge": "Georgia",
+        "de": "Germany",
+        "gh": "Ghana",
+        "gi": "Gibraltar",
+        "gr": "Greece",
+        "gl": "Greenland",
+        "gd": "Grenada",
+        "gp": "Guadeloupe",
+        "gu": "Guam",
+        "gt": "Guatemala",
+        "gg": "Guernsey",
+        "gn": "Guinea",
+        "gw": "Guinea-Bissau",
+        "gy": "Guyana",
+        "ht": "Haiti",
+        "hn": "Honduras",
+        "hk": "Hong Kong",
+        "hu": "Hungary",
+        "is": "Iceland",
+        "in": "India",
+        "id": "Indonesia",
+        "ir": "Iran",
+        "iq": "Iraq",
+        "ie": "Ireland",
+        "im": "Isle of Man",
+        "il": "Israel",
+        "it": "Italy",
+        "jm": "Jamaica",
+        "jp": "Japan",
+        "je": "Jersey",
+        "jo": "Jordan",
+        "kz": "Kazakhstan",
+        "ke": "Kenya",
+        "ki": "Kiribati",
+        "kp": "North Korea",
+        "kr": "South Korea",
+        "kw": "Kuwait",
+        "kg": "Kyrgyzstan",
+        "la": "Laos",
+        "lv": "Latvia",
+        "lb": "Lebanon",
+        "ls": "Lesotho",
+        "lr": "Liberia",
+        "ly": "Libya",
+        "li": "Liechtenstein",
+        "lt": "Lithuania",
+        "lu": "Luxembourg",
+        "mo": "Macao",
+        "mk": "North Macedonia",
+        "mg": "Madagascar",
+        "mw": "Malawi",
+        "my": "Malaysia",
+        "mv": "Maldives",
+        "ml": "Mali",
+        "mt": "Malta",
+        "mh": "Marshall Islands",
+        "mq": "Martinique",
+        "mr": "Mauritania",
+        "mu": "Mauritius",
+        "yt": "Mayotte",
+        "mx": "Mexico",
+        "fm": "Micronesia",
+        "md": "Moldova",
+        "mc": "Monaco",
+        "mn": "Mongolia",
+        "me": "Montenegro",
+        "ms": "Montserrat",
+        "ma": "Morocco",
+        "mz": "Mozambique",
+        "mm": "Myanmar",
+        "na": "Namibia",
+        "nr": "Nauru",
+        "np": "Nepal",
+        "nl": "Netherlands",
+        "nc": "New Caledonia",
+        "nz": "New Zealand",
+        "ni": "Nicaragua",
+        "ne": "Niger",
+        "ng": "Nigeria",
+        "nu": "Niue",
+        "nf": "Norfolk Island",
+        "mp": "Northern Mariana Islands",
+        "no": "Norway",
+        "om": "Oman",
+        "pk": "Pakistan",
+        "pw": "Palau",
+        "ps": "Palestine",
+        "pa": "Panama",
+        "pg": "Papua New Guinea",
+        "py": "Paraguay",
+        "pe": "Peru",
+        "ph": "Philippines",
+        "pn": "Pitcairn",
+        "pl": "Poland",
+        "pt": "Portugal",
+        "pr": "Puerto Rico",
+        "qa": "Qatar",
+        "re": "Réunion",
+        "ro": "Romania",
+        "ru": "Russia",
+        "rw": "Rwanda",
+        "sh": "Saint Helena",
+        "kn": "Saint Kitts and Nevis",
+        "lc": "Saint Lucia",
+        "pm": "Saint Pierre and Miquelon",
+        "vc": "Saint Vincent and the Grenadines",
+        "ws": "Samoa",
+        "sm": "San Marino",
+        "st": "São Tomé and Príncipe",
+        "sa": "Saudi Arabia",
+        "sn": "Senegal",
+        "rs": "Serbia",
+        "sc": "Seychelles",
+        "sl": "Sierra Leone",
+        "sg": "Singapore",
+        "sx": "Sint Maarten",
+        "sk": "Slovakia",
+        "si": "Slovenia",
+        "sb": "Solomon Islands",
+        "so": "Somalia",
+        "za": "South Africa",
+        "ss": "South Sudan",
+        "es": "Spain",
+        "lk": "Sri Lanka",
+        "sd": "Sudan",
+        "sr": "Suriname",
+        "sj": "Svalbard and Jan Mayen",
+        "sz": "Eswatini",
+        "se": "Sweden",
+        "ch": "Switzerland",
+        "sy": "Syria",
+        "tw": "Taiwan",
+        "tj": "Tajikistan",
+        "tz": "Tanzania",
+        "th": "Thailand",
+        "tl": "Timor-Leste",
+        "tg": "Togo",
+        "tk": "Tokelau",
+        "to": "Tonga",
+        "tt": "Trinidad and Tobago",
+        "tn": "Tunisia",
+        "tr": "Turkey",
+        "tm": "Turkmenistan",
+        "tc": "Turks and Caicos Islands",
+        "tv": "Tuvalu",
+        "ug": "Uganda",
+        "ua": "Ukraine",
+        "ae": "United Arab Emirates",
+        "gb": "United Kingdom",
+        "us": "United States",
+        "um": "United States Minor Outlying Islands",
+        "uy": "Uruguay",
+        "uz": "Uzbekistan",
+        "vu": "Vanuatu",
+        "va": "Vatican City",
+        "ve": "Venezuela",
+        "vn": "Vietnam",
+        "vg": "Virgin Islands (British)",
+        "vi": "Virgin Islands (U.S.)",
+        "wf": "Wallis and Futuna",
+        "eh": "Western Sahara",
+        "ye": "Yemen",
+        "zm": "Zambia",
+        "zw": "Zimbabwe"
+    })
+
+
+    /**
+     * Layout Settings
+     * Purpose: Control widget dimensions and layout behavior
+     * Operation: Manages widget sizing based on content
+     * Usage: Ensures proper display in Plasma panel
+     * Interactions: Adapts to panel position and content changes
+     */
+    Layout.fillWidth: false
+    Layout.fillHeight: false
     Layout.preferredWidth: contentLayout.implicitWidth
     Layout.preferredHeight: contentLayout.implicitHeight
-    Layout.minimumWidth: Layout.preferredWidth
-    Layout.minimumHeight: Layout.preferredHeight
 
+    /**
+     * Main Layout Structure
+     * Purpose: Organizes visual elements of the widget
+     * Operation: Arranges IP information and flag in a structured layout
+     * Usage: Creates the visual hierarchy of the widget
+     * Interactions: Updates based on content and state changes
+     */
     ColumnLayout {
         id: contentLayout
         anchors.fill: parent
         spacing: 5
 
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter
+            Layout.fillWidth: true
             spacing: 5
-            
-            Item {
-                id: flagContainer
-                Layout.preferredWidth: 17
-                Layout.preferredHeight: 17
 
-                Image {
-                    id: flagImage
-                    anchors.fill: parent
-                    source: countryCode && shouldShowFlag() ? 
-                        "https://flagcdn.com/w320/" + countryCode.toLowerCase() + ".png" : ""
-                    visible: shouldShowFlag()
-                    fillMode: Image.PreserveAspectFit
+            /**
+             * Debug Information Display
+             * Purpose: Shows technical information during debugging
+             * Operation: Displays current state variables when debug mode is active
+             * Usage: Helps in development and troubleshooting
+             * Interactions: Updates with state changes
+             */
+            QQC2.Label {
+                id: debugLabel
+                text: {
+                    let debugInfo = [
+                        "Country: " + (countryCode || "none"),
+                        "Public: " + !showingLocalIP,
+                        "LoadingIP: " + isLoadingIP,
+                        "LoadingCountry: " + isLoadingCountry,
+                        "IP: " + (showingLocalIP ? localIP : publicIP)
+                    ].join(" | ")
+                    return debugInfo
                 }
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: toggleIPDisplay()
-                }
+                visible: debugMode && !showingLocalIP
+                color: "#FF0000"
+                font.pointSize: 8
+                Layout.alignment: Qt.AlignVCenter
             }
 
+            /**
+             * IP Information Display
+             * Purpose: Shows IP address and type information
+             * Operation: Displays either local or public IP based on current mode
+             * Usage: Provides user with current IP information
+             * Interactions: Updates with IP changes and user clicks
+             */
             ColumnLayout {
                 id: ipInfoColumn
                 spacing: 0
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
                 visible: !plasmoid.configuration.showFlagOnly || showingLocalIP
 
                 QQC2.Label {
                     id: ipTypeLabel
-                    text: showingLocalIP ? Translations.getTranslation("localIP", currentLocale) : Translations.getTranslation("publicIP", currentLocale)
+                    text: showingLocalIP ? 
+                        Translations.getTranslation("localIP", currentLocale) : 
+                        Translations.getTranslation("publicIP", currentLocale)
                     font.pointSize: Math.round(Kirigami.Theme.defaultFont.pointSize * 0.8)
                     Layout.alignment: Qt.AlignHCenter
                     color: plasmoid.configuration.textColor || PlasmaCore.ColorScope.textColor
@@ -90,148 +390,238 @@ PlasmoidItem {
                     onClicked: toggleIPDisplay()
                 }
             }
+
+            /**
+             * Flag Display Component
+             * Purpose: Shows country flag for public IP
+             * Operation: Loads and displays SVG flag based on country code
+             * Usage: Provides visual indication of IP location
+             * Interactions: Updates with country code changes
+             */
+            Item {
+                id: flagContainer
+                Layout.preferredWidth: 17
+                Layout.preferredHeight: 17
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+
+                Image {
+                    id: flagImage
+                    anchors.fill: parent
+                    source: {
+                        if (countryCode && !debugMode) {
+                            return flagsPath + countryCode.toLowerCase() + ".svg"
+                        }
+                        return ""
+                    }
+                    visible: !debugMode && shouldShowFlag()
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+                    
+                    QQC2.ToolTip {
+                        text: countryNames[countryCode.toLowerCase()] || countryCode
+                        visible: flagMouseArea.containsMouse
+                        delay: 500
+                    }
+                }
+
+                MouseArea {
+                    id: flagMouseArea
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true  // Enable hover detection
+                    onClicked: toggleIPDisplay()
+                }
+            }
         }
     }
 
-    // Définition de la source de données pour exécuter des commandes
+    /**
+     * Command Execution Component
+     * Purpose: Handles shell command execution for IP and country data
+     * Operation: Executes commands and processes their output
+     * Usage: Retrieves network information from system
+     * Interactions: Provides data to update widget state
+     */
     P5Support.DataSource {
         id: executable
         engine: "executable"
         connectedSources: []
-        
-        // Gestion des nouvelles données reçues après l'exécution d'une commande
+
         onNewData: {
             var stdout = data["stdout"]
             var stderr = data["stderr"]
+            if (debugMode) {
+                console.log("📡 Commande:", sourceName)
+                console.log("📤 Stdout:", stdout)
+                console.log("📥 Stderr:", stderr)
+            }
             exited(sourceName, stdout, stderr)
             disconnectSource(sourceName)
         }
         
-        // Fonction pour exécuter une commande
         function exec(cmd) {
             connectSource(cmd)
         }
         
-        // Signal émis lorsque la commande est terminée
         signal exited(string cmd, string stdout, string stderr)
     }
 
-    // Initialisation des adresses IP lors du chargement du composant
     Component.onCompleted: {
-        getLocalIP()
-        getPublicIP()
+        if (debugMode) {
+            console.log("🎬 Démarrage widget")
+        }
+        updateData()
     }
 
-    // Fonction pour obtenir l'adresse IP locale
+    /**
+     * Data Retrieval Functions
+     * Purpose: Fetch IP and location information
+     * Operation: Execute system commands to get network data
+     * Usage: Called periodically and on user interaction
+     * Interactions: Update widget state with retrieved data
+     */
     function getLocalIP() {
+        if (debugMode) console.log("🏠 Demande IP locale")
         executable.exec("ip -4 addr show scope global | grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1")
     }
 
-    // Fonction pour obtenir l'adresse IP publique
     function getPublicIP() {
-        executable.exec("curl -s https://api.ipify.org")
+        if (!isLoadingIP) {
+            if (debugMode) console.log("🌐 Demande IP publique")
+            isLoadingIP = true
+            executable.exec("curl -s --max-time 5 https://api.ipify.org")
+        }
     }
 
-    // Fonction pour obtenir le code du pays basé sur l'IP publique
     function getCountryCode() {
-        executable.exec("curl -s https://ipapi.co/" + publicIP + "/country")
+        if (!isLoadingCountry && publicIP) {
+            if (debugMode) console.log("🌍 Demande code pays pour IP:", publicIP)
+            isLoadingCountry = true
+            executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIP + "/country")
+        }
     }
 
-    // Connexions pour surveiller les sorties des commandes exécutées
+    /**
+     * Data Management
+     * Purpose: Process command outputs and update widget state
+     * Operation: Handles responses from various data sources
+     * Usage: Maintains consistency between data and display
+     * Interactions: Triggers UI updates based on new data
+     */
     Connections {
         target: executable
         function onExited(cmd, stdout, stderr) {
-            // Si la commande est pour obtenir l'IP locale
             if (cmd.indexOf("ip -4 addr") !== -1) {
                 localIP = stdout.trim()
-            // Si la commande est pour obtenir l'IP publique
-            } else if (cmd.indexOf("ipify.org") !== -1) {
-                if (stderr === "") {
+                if (debugMode) console.log("🏠 IP locale reçue:", localIP)
+            } 
+            else if (cmd.indexOf("ipify.org") !== -1) {
+                isLoadingIP = false
+                if (stdout.trim() !== "") {
                     publicIP = stdout.trim()
-                    if (publicIP !== "") {
+                    if (debugMode) console.log("🌐 IP publique reçue:", publicIP)
+                    if (publicIP !== publicIP_OLD) {
+                        publicIP_OLD = publicIP
+                        countryCode = ""
                         getCountryCode()
                     }
                 } else {
                     publicIP = ""
                     countryCode = ""
+                    if (debugMode) console.log("❌ Pas d'IP publique reçue")
                 }
-            // Si la commande est pour obtenir le code du pays
-            } else if (cmd.indexOf("ipapi.co") !== -1) {
-                countryCode = stdout.trim()
             }
+            else if (cmd.indexOf("ipapi.co") !== -1) {
+                isLoadingCountry = false
+                var newCountry = stdout.trim()
+                if (newCountry.length === 2) {
+                    countryCode = newCountry
+                    if (debugMode) console.log("🌍 Code pays reçu:", countryCode)
+                } else {
+                    countryCode = ""
+                    if (debugMode) console.log("❌ Code pays invalide reçu")
+                }
+            }
+
             updateDisplay()
         }
     }
 
-    // Timer pour mettre à jour les adresses IP toutes les 5 secondes
+    /**
+     * Update Timer
+     * Purpose: Periodically refresh IP information
+     * Operation: Triggers data update every 5 seconds
+     * Usage: Keeps displayed information current
+     * Interactions: Initiates data retrieval cycle
+     */
     Timer {
         interval: 5000
         running: true
         repeat: true
-        onTriggered: {
+        onTriggered: updateData()
+    }
+
+    /**
+     * Utility Functions
+     * Purpose: Provide helper functions for widget operation
+     * Operation: Handle various widget states and updates
+     * Usage: Called by different widget components
+     * Interactions: Coordinate between UI and data components
+     */
+    function shouldShowFlag() {
+        return (plasmoid.configuration.showFlagOnly || plasmoid.configuration.showFlag) 
+                && countryCode.length === 2
+                && !showingLocalIP
+    }
+
+    function updateData() {
+        if (showingLocalIP) {
             getLocalIP()
+        } else {
             getPublicIP()
         }
     }
 
-    function shouldShowFlag() {
-        // Le drapeau ne doit être affiché que si :
-        // - "Afficher uniquement le drapeau" est activé ou "Afficher le drapeau" est activé
-        // - Le pays est identifié (countryCode n'est pas vide)
-        // - L'affichage actuel est l'IP publique (showingLocalIP est faux)
-        return (plasmoid.configuration.showFlagOnly || plasmoid.configuration.showFlag) 
-                && countryCode !== ""
-                && !showingLocalIP
-    }
-
     function toggleIPDisplay() {
-        // Cas spécial : si "Afficher uniquement le drapeau" est activé et que l'IP publique est affichée
-        if (plasmoid.configuration.showFlagOnly && !showingLocalIP) {
-            showingLocalIP = true
-            getLocalIP()
-        } else {
-            showingLocalIP = !showingLocalIP
-            if (!showingLocalIP) {
-                getPublicIP()
-            } else {
-                getLocalIP()
-            }
+        showingLocalIP = !showingLocalIP
+        if (debugMode) {
+            console.log("🔄 Changement mode:", showingLocalIP ? "Local" : "Public")
         }
-        updateDisplay()
+        updateData()
     }
 
     function updateDisplay() {
-        // Vérifier les états des cases à cocher
-        var showFlagOnly = plasmoid.configuration.showFlagOnly
-        var showFlag = plasmoid.configuration.showFlag
-        var showType = plasmoid.configuration.showTypeLabel
-
-        // Définir la visibilité du drapeau
-        flagImage.visible = shouldShowFlag()
-
-        // Définir la visibilité des informations IP
-        ipInfoColumn.visible = !showFlagOnly || showingLocalIP
-
-        // Définir la visibilité du type d'IP
-        ipTypeLabel.visible = showType && (!showFlagOnly || showingLocalIP)
-
-        // Actualiser le texte de l'IP en fonction de l'état
-        if (showFlagOnly && !showingLocalIP) {
-            ipAddressLabel.text = ""
-        } else {
-            ipAddressLabel.text = showingLocalIP ? localIP :
-                (publicIP !== "" ? publicIP : Translations.getTranslation("notConnected", currentLocale))
+        if (debugMode) {
+            console.log("🔄 Rafraîchissement widget")
+            console.log("📊 État:", JSON.stringify({
+                showingLocalIP: showingLocalIP,
+                localIP: localIP,
+                publicIP: publicIP,
+                countryCode: countryCode,
+                isLoadingIP: isLoadingIP,
+                isLoadingCountry: isLoadingCountry
+            }, null, 2))
         }
 
-        // Rafraîchir l'affichage
-        contentLayout.forceLayout()
+        contentLayout.Layout.preferredWidth = -1
+        contentLayout.Layout.preferredHeight = -1
+        Qt.callLater(function() {
+            contentLayout.Layout.preferredWidth = contentLayout.implicitWidth
+            contentLayout.Layout.preferredHeight = contentLayout.implicitHeight
+        })
     }
 
-    // Connexions pour surveiller les changements de configuration
+    /**
+     * Configuration Handler
+     * Purpose: Respond to widget configuration changes
+     * Operation: Updates display when settings change
+     * Usage: Maintains widget appearance per user preferences
+     * Interactions: Triggers display updates on config changes
+     */
     Connections {
         target: plasmoid.configuration
-        onShowFlagOnlyChanged: updateDisplay()
-        onShowFlagChanged: updateDisplay()
-        onShowTypeLabelChanged: updateDisplay()
+        function onShowFlagOnlyChanged() { updateDisplay() }
+        function onShowFlagChanged() { updateDisplay() }
+        function onShowTypeLabelChanged() { updateDisplay() }
     }
 }
