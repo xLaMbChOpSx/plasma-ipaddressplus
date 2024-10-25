@@ -1,27 +1,31 @@
-# IP Address Widget - Patch Notes
-
-## Version v0.6.0
+## Version v0.7.0
 
 ### 🇬🇧 English
 
 #### New Features
 
--   **Flag-only display option**: Added a new checkbox in the configuration to display only the country flag for the public IP.
--   **Dynamic visibility**: The widget now adapts its display based on the selected options and the current IP type (local/public).
+-   **Country name tooltip**: Added tooltip displaying the full country name when hovering over the flag.
+-   **Automatic country detection**: The flag now updates automatically when the IP address changes to a different country.
+-   **SVG flag support**: Implemented high-quality SVG flags for better visual rendering.
 
 #### Improvements
 
--   **Enhanced toggle behavior**: Improved the logic for switching between local and public IP display, especially when in flag-only mode.
--   **Configuration UI updates**:
-    -   The "Show Flag" and "Show IP Type" options are now disabled when "Show Flag Only" is selected.
-    -   Selecting "Show Flag Only" automatically checks "Show Flag" and unchecks "Show IP Type".
+-   **Code optimization**:
+    -   Improved code structure and organization
+    -   Enhanced state management for IP and country changes
+    -   Better handling of loading states
+-   **Visual improvements**:
+    -   Smoother flag transitions
+    -   Better flag scaling and display quality
+    -   More consistent layout handling
 
 #### Bug Fixes
 
--   Fixed an issue where the widget wouldn't update immediately after changing configuration options.
--   Resolved a problem where the local IP wasn't displaying correctly in certain configuration states.
+-   Fixed flag display issues when switching between local and public IP
+-   Resolved country code update delays when changing IP
+-   Fixed layout issues with adjacent widgets
 
-We hope you enjoy these new features and improvements!
+I continue to improve the widget's functionality and reliability!
 
 For any issues or suggestions, please visit our GitHub repository.
 
@@ -31,21 +35,27 @@ For any issues or suggestions, please visit our GitHub repository.
 
 #### Nouvelles Fonctionnalités
 
--   **Option d'affichage du drapeau uniquement** : Ajout d'une nouvelle case à cocher dans la configuration pour afficher uniquement le drapeau du pays pour l'IP publique.
--   **Visibilité dynamique** : Le widget adapte maintenant son affichage en fonction des options sélectionnées et du type d'IP actuel (locale/publique).
+-   **Infobulle du pays** : Ajout d'une infobulle affichant le nom complet du pays au survol du drapeau.
+-   **Détection automatique du pays** : Le drapeau se met à jour automatiquement lorsque l'adresse IP change de pays.
+-   **Support des drapeaux SVG** : Implémentation de drapeaux SVG haute qualité pour un meilleur rendu visuel.
 
 #### Améliorations
 
--   **Amélioration du comportement de basculement** : Logique améliorée pour le basculement entre l'affichage de l'IP locale et publique, en particulier en mode drapeau uniquement.
--   **Mises à jour de l'interface de configuration** :
-    -   Les options "Afficher le drapeau" et "Afficher le type d'IP" sont maintenant désactivées lorsque "Afficher uniquement le drapeau" est sélectionné.
-    -   La sélection de "Afficher uniquement le drapeau" coche automatiquement "Afficher le drapeau" et décoche "Afficher le type d'IP".
+-   **Optimisation du code** :
+    -   Amélioration de la structure et de l'organisation du code
+    -   Meilleure gestion des états pour les changements d'IP et de pays
+    -   Gestion améliorée des états de chargement
+-   **Améliorations visuelles** :
+    -   Transitions plus fluides des drapeaux
+    -   Meilleure mise à l'échelle et qualité d'affichage des drapeaux
+    -   Gestion plus cohérente de la mise en page
 
 #### Corrections de Bugs
 
--   Correction d'un problème où le widget ne se mettait pas à jour immédiatement après la modification des options de configuration.
--   Résolution d'un problème où l'IP locale ne s'affichait pas correctement dans certains états de configuration.
+-   Correction des problèmes d'affichage du drapeau lors du basculement entre IP locale et publique
+-   Résolution des délais de mise à jour du code pays lors du changement d'IP
+-   Correction des problèmes de mise en page avec les widgets adjacents
 
-Nous espérons que vous apprécierez ces nouvelles fonctionnalités et améliorations !
+Je continuons d'améliorer la fonctionnalité et la fiabilité du widget !
 
 Pour tout problème ou suggestion, veuillez visiter notre dépôt GitHub.

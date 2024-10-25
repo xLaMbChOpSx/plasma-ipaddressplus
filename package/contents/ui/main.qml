@@ -44,6 +44,7 @@ PlasmoidItem {
     property bool showingLocalIP: true
     readonly property bool debugMode: false
     readonly property string flagsPath: "../images/pays/"
+    property bool isResuming: false
 
     /**
     * Country Names Mapping
@@ -466,6 +467,26 @@ PlasmoidItem {
         signal exited(string cmd, string stdout, string stderr)
     }
 
+    P5Support.DataSource {
+        id: pmSource
+        engine: "powermanagement"
+        connectedSources: ["powerdevil"]
+        
+        onSourceAdded: {
+            disconnectSource(source);
+            connectSource(source);
+        }
+        
+        onDataChanged: {
+            if (data["powerdevil"] && data["powerdevil"]["Is Resuming"] === true) {
+                if (debugMode) console.log("💻 Sortie de veille détectée")
+                isResuming = true
+                // Force une mise à jour complète
+                updateData()
+            }
+        }
+    }
+
     Component.onCompleted: {
         if (debugMode) {
             console.log("🎬 Démarrage widget")
@@ -518,12 +539,13 @@ PlasmoidItem {
             else if (cmd.indexOf("ipify.org") !== -1) {
                 isLoadingIP = false
                 if (stdout.trim() !== "") {
-                    publicIP = stdout.trim()
-                    if (debugMode) console.log("🌐 IP publique reçue:", publicIP)
-                    if (publicIP !== publicIP_OLD) {
-                        publicIP_OLD = publicIP
-                        countryCode = ""
-                        getCountryCode()
+                    var newIP = stdout.trim()
+                    // Vérifie si l'IP a changé
+                    if (newIP !== publicIP) {
+                        if (debugMode) console.log("🔄 Changement d'IP détecté:", publicIP, "->", newIP)
+                        publicIP = newIP
+                        countryCode = ""  // Reset le code pays
+                        getCountryCode()  // Demande le nouveau code pays
                     }
                 } else {
                     publicIP = ""
@@ -558,7 +580,14 @@ PlasmoidItem {
         interval: 5000
         running: true
         repeat: true
-        onTriggered: updateData()
+        onTriggered: {
+            if (showingLocalIP) {
+                getLocalIP()
+            } else {
+                // Vérifie d'abord l'IP publique actuelle
+                executable.exec("curl -s --max-time 5 https://api.ipify.org")
+            }
+        }
     }
 
     /**
@@ -577,7 +606,7 @@ PlasmoidItem {
     function updateData() {
         if (showingLocalIP) {
             getLocalIP()
-        } else {
+        } else if (!publicIP) {
             getPublicIP()
         }
     }

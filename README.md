@@ -52,7 +52,7 @@ Une fois installé, vous pouvez ajouter le widget Affichage des Adresses IP à v
 
 1. Faites un clic droit sur votre bureau ou panneau.
 2. Sélectionnez "Ajouter des widgets".
-3. Trouvez "Affichage des Adresses IP" dans la liste et cliquez dessus pour l'ajouter.
+3. Trouvez "IP Address Display" dans la liste et cliquez dessus pour l'ajouter.
 
 Cliquez sur le widget pour basculer entre l'affichage de l'IP locale et publique.
 
