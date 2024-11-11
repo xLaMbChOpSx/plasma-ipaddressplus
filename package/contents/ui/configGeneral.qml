@@ -19,6 +19,17 @@ Kirigami.FormLayout {
     property alias cfg_textColor: colorPicker.chosenColor
     property alias cfg_showTypeLabel: showTypeLabel.checked
     property alias cfg_showFlagOnly: showFlagOnly.checked
+    property alias cfg_flagPosition: flagPosition.currentIndex
+
+    QQC2.ComboBox {
+        id: flagPosition
+        Kirigami.FormData.label: Translations.getTranslation("flagPosition", currentLocale)
+        model: [
+            Translations.getTranslation("flagRight", currentLocale),
+            Translations.getTranslation("flagLeft", currentLocale)
+        ]
+        enabled: showFlag.checked || showFlagOnly.checked
+    }
 
     // Case à cocher pour afficher le drapeau du pays
     QQC2.CheckBox {

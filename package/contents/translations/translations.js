@@ -12,6 +12,9 @@ var translations = {
         ipCopied: "IP address copied to clipboard",
         noIPToCopy: "No IP address to copy",
         copyError: "Error: Unable to copy IP",
+        flagPosition: "Flag position:",
+        flagRight: "Right",
+        flagLeft: "Left",
     },
     fr: {
         localIP: "IP locale",
@@ -25,6 +28,9 @@ var translations = {
         ipCopied: "Adresse IP copiée dans le presse-papiers",
         noIPToCopy: "Pas d'adresse IP à copier",
         copyError: "Erreur : Impossible de copier l'IP",
+        flagPosition: "Position du drapeau :",
+        flagRight: "À droite",
+        flagLeft: "À gauche",
     },
     es: {
         localIP: "IP local",
@@ -38,6 +44,9 @@ var translations = {
         ipCopied: "Dirección IP copiada al portapapeles",
         noIPToCopy: "No hay dirección IP para copiar",
         copyError: "Error: No se puede copiar la IP",
+        flagPosition: "Posición de la bandera:",
+        flagRight: "Derecha",
+        flagLeft: "Izquierda",
     },
     de: {
         localIP: "Lokale IP",
@@ -51,6 +60,9 @@ var translations = {
         ipCopied: "IP-Adresse in die Zwischenablage kopiert",
         noIPToCopy: "Keine IP-Adresse zum Kopieren",
         copyError: "Fehler: IP kann nicht kopiert werden",
+        flagPosition: "Position der Flagge:",
+        flagRight: "Rechts",
+        flagLeft: "Links",
     },
     it: {
         localIP: "IP locale",
@@ -64,6 +76,9 @@ var translations = {
         ipCopied: "Indirizzo IP copiato negli appunti",
         noIPToCopy: "Nessun indirizzo IP da copiare",
         copyError: "Errore: Impossibile copiare l'IP",
+        flagPosition: "Posizione della bandiera:",
+        flagRight: "Destra",
+        flagLeft: "Sinistra",
     },
     pt: {
         localIP: "IP local",
@@ -77,6 +92,9 @@ var translations = {
         ipCopied: "Endereço IP copiado para a área de transferência",
         noIPToCopy: "Nenhum endereço IP para copiar",
         copyError: "Erro: Não é possível copiar o IP",
+        flagPosition: "Posição da bandeira:",
+        flagRight: "Direita",
+        flagLeft: "Esquerda",
     },
     nl: {
         localIP: "Lokaal IP",
@@ -90,6 +108,9 @@ var translations = {
         ipCopied: "IP-adres gekopieerd naar klembord",
         noIPToCopy: "Geen IP-adres om te kopiëren",
         copyError: "Fout: Kan IP niet kopiëren",
+        flagPosition: "Vlagpositie:",
+        flagRight: "Rechts",
+        flagLeft: "Links",
     },
     ru: {
         localIP: "Локальный IP",
@@ -103,6 +124,9 @@ var translations = {
         ipCopied: "IP-адрес скопирован в буфер обмена",
         noIPToCopy: "Нет IP-адреса для копирования",
         copyError: "Ошибка: Невозможно скопировать IP",
+        flagPosition: "Положение флага:",
+        flagRight: "Справа",
+        flagLeft: "Слева",
     },
     ja: {
         localIP: "ローカルIP",
@@ -116,6 +140,9 @@ var translations = {
         ipCopied: "IPアドレスがクリップボードにコピーされました",
         noIPToCopy: "コピーするIPアドレスがありません",
         copyError: "エラー：IPをコピーできません",
+        flagPosition: "国旗の位置：",
+        flagRight: "右",
+        flagLeft: "左",
     },
     zh: {
         localIP: "本地IP",
@@ -129,6 +156,9 @@ var translations = {
         ipCopied: "IP地址已复制到剪贴板",
         noIPToCopy: "没有可复制的IP地址",
         copyError: "错误：无法复制IP",
+        flagPosition: "国旗位置：",
+        flagRight: "右",
+        flagLeft: "左",
     },
     ko: {
         localIP: "로컬 IP",
@@ -142,6 +172,9 @@ var translations = {
         ipCopied: "IP 주소가 클립보드에 복사되었습니다",
         noIPToCopy: "복사할 IP 주소가 없습니다",
         copyError: "오류: IP를 복사할 수 없습니다",
+        flagPosition: "국기 위치:",
+        flagRight: "오른쪽",
+        flagLeft: "왼쪽",
     },
     ar: {
         localIP: "IP المحلي",
@@ -155,6 +188,9 @@ var translations = {
         ipCopied: "تم نسخ عنوان IP إلى الحافظة",
         noIPToCopy: "لا يوجد عنوان IP للنسخ",
         copyError: "خطأ: تعذر نسخ IP",
+        flagPosition: "موقع العلم:",
+        flagRight: "يمين",
+        flagLeft: "يسار",
     },
     hi: {
         localIP: "स्थानीय IP",
@@ -168,6 +204,9 @@ var translations = {
         ipCopied: "IP पता क्लिपबोर्ड पर कॉपी किया गया",
         noIPToCopy: "कॉपी करने के लिए कोई IP पता नहीं है",
         copyError: "त्रुटि: IP कॉपी नहीं कर सकते",
+        flagPosition: "झंडे की स्थिति:",
+        flagRight: "दायाँ",
+        flagLeft: "बायाँ",
     },
     tr: {
         localIP: "Yerel IP",
@@ -181,6 +220,9 @@ var translations = {
         ipCopied: "IP adresi panoya kopyalandı",
         noIPToCopy: "Kopyalanacak IP adresi yok",
         copyError: "Hata: IP kopyalanamıyor",
+        flagPosition: "Bayrak konumu:",
+        flagRight: "Sağ",
+        flagLeft: "Sol",
     },
     pl: {
         localIP: "IP lokalne",
@@ -194,6 +236,9 @@ var translations = {
         ipCopied: "Adres IP skopiowany do schowka",
         noIPToCopy: "Brak adresu IP do skopiowania",
         copyError: "Błąd: Nie można skopiować IP",
+        flagPosition: "Pozycja flagi:",
+        flagRight: "Prawo",
+        flagLeft: "Lewo",
     },
     sv: {
         localIP: "Lokal IP",
@@ -207,6 +252,9 @@ var translations = {
         ipCopied: "IP-adress kopierad till urklipp",
         noIPToCopy: "Ingen IP-adress att kopiera",
         copyError: "Fel: Kan inte kopiera IP",
+        flagPosition: "Flaggans position:",
+        flagRight: "Höger",
+        flagLeft: "Vänster",
     },
     da: {
         localIP: "Lokal IP",
@@ -220,6 +268,9 @@ var translations = {
         ipCopied: "IP-adresse kopieret til udklipsholder",
         noIPToCopy: "Ingen IP-adresse at kopiere",
         copyError: "Fejl: Kan ikke kopiere IP",
+        flagPosition: "Flagposition:",
+        flagRight: "Højre",
+        flagLeft: "Venstre",
     },
     fi: {
         localIP: "Paikallinen IP",
@@ -233,6 +284,9 @@ var translations = {
         ipCopied: "IP-osoite kopioitu leikepöydälle",
         noIPToCopy: "Ei IP-osoitetta kopioitavaksi",
         copyError: "Virhe: IP:tä ei voida kopioida",
+        flagPosition: "Lipun sijainti:",
+        flagRight: "Oikea",
+        flagLeft: "Vasen",
     },
     no: {
         localIP: "Lokal IP",
@@ -246,6 +300,9 @@ var translations = {
         ipCopied: "IP-adresse kopiert til utklippstavle",
         noIPToCopy: "Ingen IP-adresse å kopiere",
         copyError: "Feil: Kan ikke kopiere IP",
+        flagPosition: "Flaggposisjon:",
+        flagRight: "Høyre",
+        flagLeft: "Venstre",
     },
     uk: {
         localIP: "Локальний IP",
@@ -259,6 +316,9 @@ var translations = {
         ipCopied: "IP-адресу скопійовано в буфер обміну",
         noIPToCopy: "Немає IP-адреси для копіювання",
         copyError: "Помилка: Неможливо скопіювати IP",
+        flagPosition: "Положення прапора:",
+        flagRight: "Праворуч",
+        flagLeft: "Ліворуч",
     },
     el: {
         localIP: "Τοπική IP",
@@ -272,6 +332,9 @@ var translations = {
         ipCopied: "Η διεύθυνση IP αντιγράφηκε στο πρόχειρο",
         noIPToCopy: "Δεν υπάρχει διεύθυνση IP για αντιγραφή",
         copyError: "Σφάλμα: Αδυναμία αντιγραφής της IP",
+        flagPosition: "Θέση σημαίας:",
+        flagRight: "Δεξιά",
+        flagLeft: "Αριστερά",
     },
     cs: {
         localIP: "Lokální IP",
@@ -285,6 +348,9 @@ var translations = {
         ipCopied: "IP adresa zkopírována do schránky",
         noIPToCopy: "Žádná IP adresa ke zkopírování",
         copyError: "Chyba: Nelze zkopírovat IP",
+        flagPosition: "Pozice vlajky:",
+        flagRight: "Vpravo",
+        flagLeft: "Vlevo",
     },
     ro: {
         localIP: "IP local",
@@ -298,6 +364,9 @@ var translations = {
         ipCopied: "Adresa IP copiată în clipboard",
         noIPToCopy: "Nu există adresă IP de copiat",
         copyError: "Eroare: Nu se poate copia IP-ul",
+        flagPosition: "Poziția steagului:",
+        flagRight: "Dreapta",
+        flagLeft: "Stânga",
     },
     hu: {
         localIP: "Helyi IP",
@@ -311,6 +380,9 @@ var translations = {
         ipCopied: "IP-cím a vágólapra másolva",
         noIPToCopy: "Nincs másolható IP-cím",
         copyError: "Hiba: Nem lehet másolni az IP-t",
+        flagPosition: "Zászló pozíciója:",
+        flagRight: "Jobb",
+        flagLeft: "Bal",
     },
     th: {
         localIP: "IP ภายใน",
@@ -324,6 +396,9 @@ var translations = {
         ipCopied: "คัดลอกที่อยู่ IP ไปยังคลิปบอร์ดแล้ว",
         noIPToCopy: "ไม่มีที่อยู่ IP ที่จะคัดลอก",
         copyError: "ข้อผิดพลาด: ไม่สามารถคัดลอก IP ได้",
+        flagPosition: "ตำแหน่งธง:",
+        flagRight: "ขวา",
+        flagLeft: "ซ้าย",
     },
     id: {
         localIP: "IP Lokal",
@@ -337,6 +412,9 @@ var translations = {
         ipCopied: "Alamat IP disalin ke clipboard",
         noIPToCopy: "Tidak ada alamat IP untuk disalin",
         copyError: "Kesalahan: Tidak dapat menyalin IP",
+        flagPosition: "Posisi bendera:",
+        flagRight: "Kanan",
+        flagLeft: "Kiri",
     },
     vi: {
         localIP: "IP cục bộ",
@@ -350,6 +428,9 @@ var translations = {
         ipCopied: "Đã sao chép địa chỉ IP vào bộ nhớ tạm",
         noIPToCopy: "Không có địa chỉ IP để sao chép",
         copyError: "Lỗi: Không thể sao chép IP",
+        flagPosition: "Vị trí cờ:",
+        flagRight: "Phải",
+        flagLeft: "Trái",
     },
     ms: {
         localIP: "IP Tempatan",
@@ -363,6 +444,9 @@ var translations = {
         ipCopied: "Alamat IP disalin ke papan keratan",
         noIPToCopy: "Tiada alamat IP untuk disalin",
         copyError: "Ralat: Tidak dapat menyalin IP",
+        flagPosition: "Kedudukan bendera:",
+        flagRight: "Kanan",
+        flagLeft: "Kiri",
     },
     he: {
         localIP: "IP מקומי",
@@ -372,10 +456,13 @@ var translations = {
         showCountryFlag: "הצג דגל מדינה:",
         showIPType: "הצג סוג IP (מקומי/ציבורי):",
         textColor: "צבע טקסט:",
-        showFlagOnly: "הצג רק דגל עבור IP ציבורי:",
-        ipCopied: "כתובת ה-IP הועתקה ללוח",
+        showFlagOnly: "הצג דגל בלבד עבור IP ציבורי:",
+        ipCopied: "כתובת IP הועתקה ללוח",
         noIPToCopy: "אין כתובת IP להעתקה",
         copyError: "שגיאה: לא ניתן להעתיק את ה-IP",
+        flagPosition: "מיקום הדגל:",
+        flagRight: "ימין",
+        flagLeft: "שמאל",
     },
 };
 
