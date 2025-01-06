@@ -45,6 +45,8 @@ PlasmoidItem {
     readonly property bool debugMode: false
     readonly property string flagsPath: "../images/pays/"
     property bool isResuming: false
+    property string customPrefix: plasmoid.configuration.customPrefix
+    property string selectedInterface: plasmoid.configuration.selectedInterface
 
     /**
     * Country Names Mapping
@@ -372,8 +374,11 @@ PlasmoidItem {
 
                     QQC2.Label {
                         id: ipAddressLabel
-                        text: showingLocalIP ? localIP :
-                            (publicIP !== "" ? publicIP : Translations.getTranslation("notConnected", currentLocale))
+                        text: {
+                            let ipText = showingLocalIP ? localIP :
+                                (publicIP !== "" ? publicIP : Translations.getTranslation("notConnected", currentLocale))
+                            return customPrefix ? (customPrefix + " " + ipText) : ipText
+                        }
                         Layout.alignment: Qt.AlignHCenter
                         color: {
                             if (publicIP === "" && !showingLocalIP) {
@@ -496,8 +501,12 @@ PlasmoidItem {
      * Interactions: Update widget state with retrieved data
      */
     function getLocalIP() {
-        if (debugMode) console.log("🏠 Demande IP locale")
-        executable.exec("ip -4 addr show scope global | grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1")
+        if (debugMode) console.log("🏠 Demande IP locale pour interface:", selectedInterface)
+        if (selectedInterface) {
+            executable.exec("ip -4 addr show " + selectedInterface + " scope global | grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1")
+        } else {
+            executable.exec("ip -4 addr show scope global | grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1")
+        }
     }
 
     function getPublicIP() {
