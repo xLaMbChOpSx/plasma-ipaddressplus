@@ -26,5 +26,8 @@
     <entry name="customPrefix" type="String">
       <default></default>
     </entry>
+    <entry name="lastSelectedInterface" type="String">
+      <default></default>
+    </entry>
   </group>
 </kcfg>

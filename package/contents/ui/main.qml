@@ -451,7 +451,7 @@ PlasmoidItem {
             var stdout = data["stdout"]
             var stderr = data["stderr"]
             if (debugMode) {
-                console.log("📡 Commande:", sourceName)
+                console.log("📡 Command:", sourceName)
                 console.log("📤 Stdout:", stdout)
                 console.log("📥 Stderr:", stderr)
             }
@@ -478,9 +478,9 @@ PlasmoidItem {
         
         onDataChanged: {
             if (data["powerdevil"] && data["powerdevil"]["Is Resuming"] === true) {
-                if (debugMode) console.log("💻 Sortie de veille détectée")
+                if (debugMode) console.log("💻 Wake from sleep detected")
                 isResuming = true
-                // Force une mise à jour complète
+                // Force a complete update
                 updateData()
             }
         }
@@ -488,7 +488,7 @@ PlasmoidItem {
 
     Component.onCompleted: {
         if (debugMode) {
-            console.log("🎬 Démarrage widget")
+            console.log("🎬 Widget startup")
         }
         updateData()
     }
@@ -501,7 +501,7 @@ PlasmoidItem {
      * Interactions: Update widget state with retrieved data
      */
     function getLocalIP() {
-        if (debugMode) console.log("🏠 Demande IP locale pour interface:", selectedInterface)
+        if (debugMode) console.log("🏠 Requesting local IP for interface:", selectedInterface)
         if (selectedInterface) {
             executable.exec("ip -4 addr show " + selectedInterface + " scope global | grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1")
         } else {
@@ -511,7 +511,7 @@ PlasmoidItem {
 
     function getPublicIP() {
         if (!isLoadingIP) {
-            if (debugMode) console.log("🌐 Demande IP publique")
+            if (debugMode) console.log("🌐 Requesting public IP")
             isLoadingIP = true
             executable.exec("curl -s --max-time 5 https://api.ipify.org")
         }
@@ -519,7 +519,7 @@ PlasmoidItem {
 
     function getCountryCode() {
         if (!isLoadingCountry && publicIP) {
-            if (debugMode) console.log("🌍 Demande code pays pour IP:", publicIP)
+            if (debugMode) console.log("🌍 Requesting country code for IP:", publicIP)
             isLoadingCountry = true
             executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIP + "/country")
         }
@@ -537,23 +537,23 @@ PlasmoidItem {
         function onExited(cmd, stdout, stderr) {
             if (cmd.indexOf("ip -4 addr") !== -1) {
                 localIP = stdout.trim()
-                if (debugMode) console.log("🏠 IP locale reçue:", localIP)
+                if (debugMode) console.log("🏠 Local IP received:", localIP)
             } 
             else if (cmd.indexOf("ipify.org") !== -1) {
                 isLoadingIP = false
                 if (stdout.trim() !== "") {
                     var newIP = stdout.trim()
-                    // Vérifie si l'IP a changé
+                    // Check if IP has changed
                     if (newIP !== publicIP) {
-                        if (debugMode) console.log("🔄 Changement d'IP détecté:", publicIP, "->", newIP)
+                        if (debugMode) console.log("🔄 IP change detected:", publicIP, "->", newIP)
                         publicIP = newIP
-                        countryCode = ""  // Reset le code pays
-                        getCountryCode()  // Demande le nouveau code pays
+                        countryCode = ""  // Reset country code
+                        getCountryCode()  // Request new country code
                     }
                 } else {
                     publicIP = ""
                     countryCode = ""
-                    if (debugMode) console.log("❌ Pas d'IP publique reçue")
+                    if (debugMode) console.log("❌ No public IP received")
                 }
             }
             else if (cmd.indexOf("ipapi.co") !== -1) {
@@ -561,10 +561,10 @@ PlasmoidItem {
                 var newCountry = stdout.trim()
                 if (newCountry.length === 2) {
                     countryCode = newCountry
-                    if (debugMode) console.log("🌍 Code pays reçu:", countryCode)
+                    if (debugMode) console.log("🌍 Country code received:", countryCode)
                 } else {
                     countryCode = ""
-                    if (debugMode) console.log("❌ Code pays invalide reçu")
+                    if (debugMode) console.log("❌ Invalid country code received")
                 }
             }
 
@@ -587,7 +587,7 @@ PlasmoidItem {
             if (showingLocalIP) {
                 getLocalIP()
             } else {
-                // Vérifie d'abord l'IP publique actuelle
+                // Check current public IP first
                 executable.exec("curl -s --max-time 5 https://api.ipify.org")
             }
         }
@@ -617,15 +617,15 @@ PlasmoidItem {
     function toggleIPDisplay() {
         showingLocalIP = !showingLocalIP
         if (debugMode) {
-            console.log("🔄 Changement mode:", showingLocalIP ? "Local" : "Public")
+            console.log("🔄 Mode change:", showingLocalIP ? "Local" : "Public")
         }
         updateData()
     }
 
     function updateDisplay() {
         if (debugMode) {
-            console.log("🔄 Rafraîchissement widget")
-            console.log("📊 État:", JSON.stringify({
+            console.log("🔄 Refreshing widget")
+            console.log("📊 State:", JSON.stringify({
                 showingLocalIP: showingLocalIP,
                 localIP: localIP,
                 publicIP: publicIP,
