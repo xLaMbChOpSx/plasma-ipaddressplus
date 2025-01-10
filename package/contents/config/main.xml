@@ -29,5 +29,8 @@
     <entry name="lastSelectedInterface" type="String">
       <default></default>
     </entry>
+    <entry name="noIPMessage" type="String">
+      <default>Disconnected</default>
+    </entry>
   </group>
 </kcfg>

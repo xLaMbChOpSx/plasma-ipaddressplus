@@ -375,17 +375,21 @@ PlasmoidItem {
                     QQC2.Label {
                         id: ipAddressLabel
                         text: {
-                            let ipText = showingLocalIP ? localIP :
-                                (publicIP !== "" ? publicIP : Translations.getTranslation("notConnected", currentLocale))
-                            return customPrefix ? (customPrefix + " " + ipText) : ipText
+                            let ipText;
+                            if (showingLocalIP) {
+                                ipText = localIP ? localIP : plasmoid.configuration.noIPMessage;
+                            } else {
+                                ipText = publicIP ? publicIP : plasmoid.configuration.noIPMessage;
+                            }
+                            return customPrefix ? (customPrefix + " " + ipText) : ipText;
                         }
                         Layout.alignment: Qt.AlignHCenter
                         color: {
-                            if (publicIP === "" && !showingLocalIP) {
-                                return "#FF0000"
-                            } else {
-                                return plasmoid.configuration.textColor || PlasmaCore.ColorScope.textColor
+                            if ((!localIP && showingLocalIP) || (!publicIP && !showingLocalIP)) {
+                                return "#FF0000";  // Rouge pour indiquer une déconnexion
                             }
+                            // Utilise la couleur configurée ou celle par défaut du thème
+                            return plasmoid.configuration.textColor || PlasmaCore.ColorScope.textColor;
                         }
                     }
 

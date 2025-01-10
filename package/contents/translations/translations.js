@@ -20,6 +20,9 @@ var translations = {
         customPrefixPlaceholder: "Enter text to display before IP",
         noInterfaceSelected: "No interface selected",
         currentInterface: "Current Interface",
+        noIPMessage: "Message when no IP is found:",
+        noIPMessagePlaceholder:
+            "Enter text to display when interface is disconnected",
     },
     fr: {
         localIP: "IP locale",
@@ -41,6 +44,9 @@ var translations = {
         customPrefixPlaceholder: "Entrez le texte à afficher avant l'IP",
         noInterfaceSelected: "Aucune interface sélectionnée",
         currentInterface: "Interface actuelle",
+        noIPMessage: "Message quand aucune IP n'est trouvée :",
+        noIPMessagePlaceholder:
+            "Entrez le texte à afficher quand l'interface est déconnectée",
     },
     es: {
         localIP: "IP local",

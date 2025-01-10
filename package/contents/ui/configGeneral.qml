@@ -42,6 +42,7 @@ Kirigami.FormLayout {
     property alias cfg_showFlagOnly: showFlagOnly.checked
     property alias cfg_flagPosition: flagPosition.currentIndex
     property alias cfg_customPrefix: customPrefixField.text
+    property alias cfg_noIPMessage: noIPMessageField.text
 
     /**
      * Network Interface Management
@@ -115,6 +116,13 @@ Kirigami.FormLayout {
         id: customPrefixField
         Kirigami.FormData.label: Translations.getTranslation("customPrefix", currentLocale)
         placeholderText: Translations.getTranslation("customPrefixPlaceholder", currentLocale)
+        Layout.fillWidth: true
+    }
+
+    QQC2.TextField {
+        id: noIPMessageField
+        Kirigami.FormData.label: Translations.getTranslation("noIPMessage", currentLocale)
+        placeholderText: Translations.getTranslation("noIPMessagePlaceholder", currentLocale)
         Layout.fillWidth: true
     }
 
