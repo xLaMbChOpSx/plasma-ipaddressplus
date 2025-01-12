@@ -6,7 +6,7 @@
   <kcfgfile name=""/>
   <group name="General">
     <entry name="textColor" type="Color">
-      <default>#FFFFFF</default>
+      <default>#00000000</default>
     </entry>
     <entry name="showFlag" type="Bool">
       <default>true</default>

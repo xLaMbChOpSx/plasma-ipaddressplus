@@ -4,7 +4,7 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
+ * the License or version 3 or any later version
  * accepted by the membership of KDE e.V. (or its successor approved
  * by the membership of KDE e.V.), which shall act as a proxy
  * defined in Section 14 of version 3 of the license.
@@ -38,14 +38,16 @@ Item {
 
     // Rectangle to display the chosen color
     Rectangle {
-        color: colorDialog.color
+        color: chosenColor != "" && String(chosenColor) !== "#00000000" 
+            ? chosenColor 
+            : Kirigami.Theme.textColor
         radius: width / 2
         height: 20
         width: height
         opacity: enabled ? 1 : 0.5
         border {
             width: mouseArea.containsMouse ? 3 : 1
-            color: Qt.darker(colorDialog.color, 1.5)
+            color: Qt.darker(color, 1.5)
         }
 
         // Color dialog for selecting a new color
