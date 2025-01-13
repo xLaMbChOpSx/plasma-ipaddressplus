@@ -23,6 +23,7 @@ var translations = {
         noIPMessage: "Message when no IP is found:",
         noIPMessagePlaceholder:
             "Enter text to display when interface is disconnected",
+        disconnectedTextColor: "Disconnected text color:",
     },
     fr: {
         localIP: "IP locale",
@@ -47,6 +48,7 @@ var translations = {
         noIPMessage: "Message quand aucune IP n'est trouvée :",
         noIPMessagePlaceholder:
             "Entrez le texte à afficher quand l'interface est déconnectée",
+        disconnectedTextColor: "Couleur du texte déconnecté :",
     },
     es: {
         localIP: "IP local",
@@ -68,6 +70,7 @@ var translations = {
         customPrefixPlaceholder: "Ingrese texto para mostrar antes de la IP",
         noInterfaceSelected: "Ninguna interfaz seleccionada",
         currentInterface: "Interfaz actual",
+        disconnectedTextColor: "Color del texto desconectado:",
     },
     de: {
         localIP: "Lokale IP",
@@ -90,6 +93,7 @@ var translations = {
             "Text eingeben, der vor IP angezeigt werden soll",
         noInterfaceSelected: "Keine Schnittstelle ausgewählt",
         currentInterface: "Aktuelle Schnittstelle",
+        disconnectedTextColor: "Farbe des getrennten Textes:",
     },
     it: {
         localIP: "IP locale",
@@ -112,6 +116,7 @@ var translations = {
             "Inserisci il testo da visualizzare prima dell'IP",
         noInterfaceSelected: "Nessuna interfaccia selezionata",
         currentInterface: "Interfaccia attuale",
+        disconnectedTextColor: "Colore del testo disconnesso:",
     },
     pt: {
         localIP: "IP local",
@@ -133,6 +138,7 @@ var translations = {
         customPrefixPlaceholder: "Digite o texto para exibir antes do IP",
         noInterfaceSelected: "Nenhuma interface selecionada",
         currentInterface: "Interface atual",
+        disconnectedTextColor: "Cor do texto desconectado:",
     },
     nl: {
         localIP: "Lokaal IP",
@@ -154,6 +160,7 @@ var translations = {
         customPrefixPlaceholder: "Voer tekst in om voor IP weer te geven",
         noInterfaceSelected: "Geen interface geselecteerd",
         currentInterface: "Huidige interface",
+        disconnectedTextColor: "Kleur van losgekoppelde tekst:",
     },
     ru: {
         localIP: "Локальный IP",
@@ -175,6 +182,7 @@ var translations = {
         customPrefixPlaceholder: "Введите текст для отображения перед IP",
         noInterfaceSelected: "Интерфейс не выбран",
         currentInterface: "Текущий интерфейс",
+        disconnectedTextColor: "Цвет отключенного текста:",
     },
     ja: {
         localIP: "ローカルIP",
@@ -196,6 +204,7 @@ var translations = {
         customPrefixPlaceholder: "IPの前に表示するテキストを入力",
         noInterfaceSelected: "インターフェースが選択されていません",
         currentInterface: "現在のインターフェース",
+        disconnectedTextColor: "切断されたテキストの色：",
     },
     zh: {
         localIP: "本地IP",
@@ -217,6 +226,7 @@ var translations = {
         customPrefixPlaceholder: "输入要在IP前显示的文本",
         noInterfaceSelected: "未选择接口",
         currentInterface: "当前接口",
+        disconnectedTextColor: "断开连接的文本颜色：",
     },
     ko: {
         localIP: "로컬 IP",
@@ -238,6 +248,7 @@ var translations = {
         customPrefixPlaceholder: "IP 앞에 표시할 텍스트 입력",
         noInterfaceSelected: "선택된 인터페이스 없음",
         currentInterface: "현재 인터페이스",
+        disconnectedTextColor: "연결이 끊어진 텍스트 색상:",
     },
     ar: {
         localIP: "IP المحلي",
@@ -259,6 +270,7 @@ var translations = {
         customPrefixPlaceholder: "أدخل النص لعرضه قبل IP",
         noInterfaceSelected: "لم يتم اختيار واجهة",
         currentInterface: "الواجهة الحالية",
+        disconnectedTextColor: "لون النص غير المتصل:",
     },
     hi: {
         localIP: "स्थानीय IP",
@@ -281,6 +293,7 @@ var translations = {
             "IP से पहले प्रदर्शित करने के लिए टेक्स्ट दर्ज करें",
         noInterfaceSelected: "कोई इंटरफ़ेस चयनित नहीं",
         currentInterface: "वर्तमान इंटरफ़ेस",
+        disconnectedTextColor: "डिस्कनेक्टेड टेक्स्ट का रंग:",
     },
     tr: {
         localIP: "Yerel IP",
@@ -302,6 +315,7 @@ var translations = {
         customPrefixPlaceholder: "IP'den önce görüntülenecek metni girin",
         noInterfaceSelected: "Arayüz seçilmedi",
         currentInterface: "Mevcut Arayüz",
+        disconnectedTextColor: "Bağlantısı kesilen metin rengi:",
     },
     pl: {
         localIP: "IP lokalne",
@@ -323,6 +337,7 @@ var translations = {
         customPrefixPlaceholder: "Wprowadź tekst do wyświetlenia przed IP",
         noInterfaceSelected: "Nie wybrano interfejsu",
         currentInterface: "Bieżący interfejs",
+        disconnectedTextColor: "Kolor odłączonego tekstu:",
     },
     sv: {
         localIP: "Lokal IP",
@@ -344,6 +359,7 @@ var translations = {
         customPrefixPlaceholder: "Ange text att visa före IP",
         noInterfaceSelected: "Inget gränssnitt valt",
         currentInterface: "Aktuellt gränssnitt",
+        disconnectedTextColor: "Färg på frånkopplad text:",
     },
     da: {
         localIP: "Lokal IP",
@@ -365,6 +381,7 @@ var translations = {
         customPrefixPlaceholder: "Indtast tekst der skal vises før IP",
         noInterfaceSelected: "Ingen interface valgt",
         currentInterface: "Nuværende interface",
+        disconnectedTextColor: "Farve på afbrudt tekst:",
     },
     fi: {
         localIP: "Paikallinen IP",
@@ -386,6 +403,7 @@ var translations = {
         customPrefixPlaceholder: "Syötä teksti näytettäväksi ennen IP:tä",
         noInterfaceSelected: "Ei valittua liitäntää",
         currentInterface: "Nykyinen liitäntä",
+        disconnectedTextColor: "Katkaistun tekstin väri:",
     },
     no: {
         localIP: "Lokal IP",
@@ -407,6 +425,7 @@ var translations = {
         customPrefixPlaceholder: "Skriv inn tekst som skal vises før IP",
         noInterfaceSelected: "Ingen grensesnitt valgt",
         currentInterface: "Gjeldende grensesnitt",
+        disconnectedTextColor: "Frakoblet tekstfarge:",
     },
     uk: {
         localIP: "Локальний IP",
@@ -428,6 +447,7 @@ var translations = {
         customPrefixPlaceholder: "Введіть текст для відображення перед IP",
         noInterfaceSelected: "Інтерфейс не вибрано",
         currentInterface: "Поточний інтерфейс",
+        disconnectedTextColor: "Колір відключеного тексту:",
     },
     el: {
         localIP: "Τοπική IP",
@@ -449,6 +469,7 @@ var translations = {
         customPrefixPlaceholder: "Εισάγετε κείμενο για εμφάνιση πριν την IP",
         noInterfaceSelected: "Δεν επιλέχθηκε διεπαφή",
         currentInterface: "Τρέχουσα διεπαφή",
+        disconnectedTextColor: "Χρώμα αποσυνδεδεμένου κειμένου:",
     },
     cs: {
         localIP: "Lokální IP",
@@ -470,6 +491,7 @@ var translations = {
         customPrefixPlaceholder: "Zadejte text k zobrazení před IP",
         noInterfaceSelected: "Není vybráno rozhraní",
         currentInterface: "Aktuální rozhraní",
+        disconnectedTextColor: "Barva odpojeného textu:",
     },
     ro: {
         localIP: "IP local",
@@ -492,6 +514,7 @@ var translations = {
             "Introduceți textul de afișat înaintea IP-ului",
         noInterfaceSelected: "Nicio interfață selectată",
         currentInterface: "Interfață curentă",
+        disconnectedTextColor: "Culoarea textului deconectat:",
     },
     hu: {
         localIP: "Helyi IP",
@@ -513,6 +536,7 @@ var translations = {
         customPrefixPlaceholder: "Írja be az IP előtt megjelenítendő szöveget",
         noInterfaceSelected: "Nincs kiválasztott interfész",
         currentInterface: "Jelenlegi interfész",
+        disconnectedTextColor: "Leválasztott szöveg színe:",
     },
     th: {
         localIP: "IP ภายใน",
@@ -534,6 +558,7 @@ var translations = {
         customPrefixPlaceholder: "ป้อนข้อความที่จะแสดงก่อน IP",
         noInterfaceSelected: "ไม่ได้เลือกอินเตอร์เฟซ",
         currentInterface: "อินเตอร์เฟซปัจจุบัน",
+        disconnectedTextColor: "สีข้อความที่ตัดการเชื่อมต่อ:",
     },
     id: {
         localIP: "IP Lokal",
@@ -555,6 +580,7 @@ var translations = {
         customPrefixPlaceholder: "Masukkan teks untuk ditampilkan sebelum IP",
         noInterfaceSelected: "Tidak ada antarmuka yang dipilih",
         currentInterface: "Antarmuka saat ini",
+        disconnectedTextColor: "Warna teks terputus:",
     },
     vi: {
         localIP: "IP cục bộ",
@@ -576,6 +602,7 @@ var translations = {
         customPrefixPlaceholder: "Nhập văn bản để hiển thị trước IP",
         noInterfaceSelected: "Chưa chọn giao diện",
         currentInterface: "Giao diện hiện tại",
+        disconnectedTextColor: "Màu văn bản ngắt kết nối:",
     },
     ms: {
         localIP: "IP Tempatan",
@@ -597,6 +624,7 @@ var translations = {
         customPrefixPlaceholder: "Masukkan teks untuk dipaparkan sebelum IP",
         noInterfaceSelected: "Tiada antara muka dipilih",
         currentInterface: "Antara muka semasa",
+        disconnectedTextColor: "Warna teks terputus:",
     },
     he: {
         localIP: "IP מקומי",
@@ -618,6 +646,7 @@ var translations = {
         customPrefixPlaceholder: "הזן טקסט להצגה לפני IP",
         noInterfaceSelected: "לא נבחר ממשק",
         currentInterface: "ממשק נוכחי",
+        disconnectedTextColor: "צבע טקסט מנותק:",
     },
 };
 

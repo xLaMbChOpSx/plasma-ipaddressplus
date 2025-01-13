@@ -32,5 +32,8 @@
     <entry name="noIPMessage" type="String">
       <default>Disconnected</default>
     </entry>
+    <entry name="disconnectedTextColor" type="Color">
+      <default>#FF0000</default>
+    </entry>
   </group>
 </kcfg>

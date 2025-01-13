@@ -149,7 +149,7 @@ PlasmoidItem {
                         Layout.alignment: Qt.AlignHCenter
                         color: {
                             if ((!localIP && showingLocalIP) || (!publicIP && !showingLocalIP)) {
-                                return "#eb2f0e";
+                                return plasmoid.configuration.disconnectedTextColor;
                             }
                             return plasmoid.configuration.textColor != "" && String(plasmoid.configuration.textColor) !== "#00000000" 
                                 ? plasmoid.configuration.textColor 

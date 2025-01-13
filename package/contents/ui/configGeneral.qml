@@ -43,6 +43,7 @@ Kirigami.FormLayout {
     property alias cfg_flagPosition: flagPosition.currentIndex
     property alias cfg_customPrefix: customPrefixField.text
     property alias cfg_noIPMessage: noIPMessageField.text
+    property alias cfg_disconnectedTextColor: disconnectedColorPicker.chosenColor
 
     /**
      * Network Interface Management
@@ -170,12 +171,19 @@ Kirigami.FormLayout {
         }
     }
 
-    // Text color picker
+    // Text color pickers
     RowLayout {
         Kirigami.FormData.label: Translations.getTranslation("textColor", currentLocale)
 
         ColorPicker {
             id: colorPicker
+        }
+    }
+
+    RowLayout {
+        Kirigami.FormData.label: Translations.getTranslation("disconnectedTextColor", currentLocale)
+        ColorPicker {
+            id: disconnectedColorPicker
         }
     }
 }
