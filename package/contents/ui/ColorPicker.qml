@@ -23,6 +23,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Dialogs as QtDialogs
 import Qt.labs.platform
+import org.kde.kirigami 2.20 as Kirigami
 
 // Main component for the color picker
 Item {
@@ -38,7 +39,7 @@ Item {
 
     // Rectangle to display the chosen color
     Rectangle {
-        color: chosenColor != "" && String(chosenColor) !== "#00000000" 
+        color: chosenColor != "" && String(chosenColor) !== "#00000000"
             ? chosenColor 
             : Kirigami.Theme.textColor
         radius: width / 2

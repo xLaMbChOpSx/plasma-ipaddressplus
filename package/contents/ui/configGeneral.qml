@@ -1,5 +1,5 @@
 /**
- * Configuration Panel for IP Address Display Plasmoid
+ * Configuration Panel for IP Address Display Plus Plasmoid
  * Purpose: Provides user interface for widget settings
  * Operation: Manages user preferences and interface selection
  * Usage: Allows users to customize widget appearance and behavior
