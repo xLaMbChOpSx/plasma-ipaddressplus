@@ -2,7 +2,10 @@
 var translations = {
     en: {
         localIP: "Local IP",
+        localIPv6: "Local IPv6",
         publicIP: "Public IP",
+        publicIPv6: "Public IPv6",
+        vpnIP: "VPN IP",
         loading: "Loading...",
         notConnected: "Not connected to the internet",
         showCountryFlag: "Show country flag:",
@@ -27,7 +30,9 @@ var translations = {
     },
     fr: {
         localIP: "IP locale",
+        localIPv6: "IPv6 locale",
         publicIP: "IP publique",
+        publicIPv6: "IPv6 publique",
         loading: "Chargement...",
         notConnected: "Non connecté à internet",
         showCountryFlag: "Afficher le drapeau du pays :",
@@ -52,7 +57,9 @@ var translations = {
     },
     es: {
         localIP: "IP local",
+        localIPv6: "IPv6 local",
         publicIP: "IP pública",
+        publicIPv6: "IPv6 pública",
         loading: "Cargando...",
         notConnected: "No conectado a internet",
         showCountryFlag: "Mostrar bandera del país:",
@@ -74,7 +81,9 @@ var translations = {
     },
     de: {
         localIP: "Lokale IP",
+        localIPv6: "Lokale IPv6",
         publicIP: "Öffentliche IP",
+        publicIPv6: "Öffentliche IPv6",
         loading: "Wird geladen...",
         notConnected: "Nicht mit dem Internet verbunden",
         showCountryFlag: "Landesflagge anzeigen:",
@@ -97,7 +106,9 @@ var translations = {
     },
     it: {
         localIP: "IP locale",
+        localIPv6: "IPv6 locale",
         publicIP: "IP pubblica",
+        publicIPv6: "IPv6 pubblica",
         loading: "Caricamento...",
         notConnected: "Non connesso a Internet",
         showCountryFlag: "Mostra bandiera del paese:",
@@ -120,7 +131,9 @@ var translations = {
     },
     pt: {
         localIP: "IP local",
+        localIPv6: "IPv6 local",
         publicIP: "IP público",
+        publicIPv6: "IPv6 público",
         loading: "Carregando...",
         notConnected: "Não conectado à internet",
         showCountryFlag: "Mostrar bandeira do país:",
@@ -142,7 +155,9 @@ var translations = {
     },
     nl: {
         localIP: "Lokaal IP",
+        localIPv6: "Lokaal IPv6",
         publicIP: "Openbaar IP",
+        publicIPv6: "Openbaar IPv6",
         loading: "Laden...",
         notConnected: "Niet verbonden met internet",
         showCountryFlag: "Landvlag tonen:",
@@ -164,7 +179,9 @@ var translations = {
     },
     ru: {
         localIP: "Локальный IP",
+        localIPv6: "Локальный IPv6",
         publicIP: "Публичный IP",
+        publicIPv6: "Публичный IPv6",
         loading: "Загрузка...",
         notConnected: "Нет подключения к интернету",
         showCountryFlag: "Показать флаг страны:",
@@ -186,7 +203,9 @@ var translations = {
     },
     ja: {
         localIP: "ローカルIP",
+        localIPv6: "ローカルIPv6",
         publicIP: "パブリックIP",
+        publicIPv6: "パブリックIPv6",
         loading: "読み込み中...",
         notConnected: "インターネットに接続されていません",
         showCountryFlag: "国旗を表示：",
@@ -208,7 +227,9 @@ var translations = {
     },
     zh: {
         localIP: "本地IP",
+        localIPv6: "本地IPv6",
         publicIP: "公共IP",
+        publicIPv6: "公共IPv6",
         loading: "加载中...",
         notConnected: "未连接到互联网",
         showCountryFlag: "显示国旗：",
@@ -230,7 +251,9 @@ var translations = {
     },
     ko: {
         localIP: "로컬 IP",
+        localIPv6: "로컬 IPv6",
         publicIP: "공용 IP",
+        publicIPv6: "공용 IPv6",
         loading: "로딩 중...",
         notConnected: "인터넷에 연결되지 않음",
         showCountryFlag: "국가 국기 표시:",
@@ -252,7 +275,9 @@ var translations = {
     },
     ar: {
         localIP: "IP المحلي",
+        localIPv6: "IPv6 المحلي",
         publicIP: "IP العام",
+        publicIPv6: "IPv6 العام",
         loading: "جاري التحميل...",
         notConnected: "غير متصل بالإنترنت",
         showCountryFlag: "عرض علم الدولة:",
@@ -274,7 +299,9 @@ var translations = {
     },
     hi: {
         localIP: "स्थानीय IP",
+        localIPv6: "स्थानीय IPv6",
         publicIP: "सार्वजनिक IP",
+        publicIPv6: "सार्वजनिक IPv6",
         loading: "लोड हो रहा है...",
         notConnected: "इंटरनेट से कनेक्ट नहीं है",
         showCountryFlag: "देश का झंडा दिखाएं:",
@@ -297,7 +324,9 @@ var translations = {
     },
     tr: {
         localIP: "Yerel IP",
+        localIPv6: "Yerel IPv6",
         publicIP: "Genel IP",
+        publicIPv6: "Genel IPv6",
         loading: "Yükleniyor...",
         notConnected: "İnternete bağlı değil",
         showCountryFlag: "Ülke bayrağını göster:",
@@ -319,7 +348,9 @@ var translations = {
     },
     pl: {
         localIP: "IP lokalne",
+        localIPv6: "IPv6 lokalne",
         publicIP: "IP publiczne",
+        publicIPv6: "IPv6 publiczne",
         loading: "Ładowanie...",
         notConnected: "Brak połączenia z internetem",
         showCountryFlag: "Pokaż flagę kraju:",
@@ -341,7 +372,9 @@ var translations = {
     },
     sv: {
         localIP: "Lokal IP",
+        localIPv6: "Lokal IPv6",
         publicIP: "Offentlig IP",
+        publicIPv6: "Offentlig IPv6",
         loading: "Laddar...",
         notConnected: "Inte ansluten till internet",
         showCountryFlag: "Visa landsflagga:",
@@ -363,7 +396,9 @@ var translations = {
     },
     da: {
         localIP: "Lokal IP",
+        localIPv6: "Lokal IPv6",
         publicIP: "Offentlig IP",
+        publicIPv6: "Offentlig IPv6",
         loading: "Indlæser...",
         notConnected: "Ikke forbundet til internettet",
         showCountryFlag: "Vis landeflag:",
@@ -385,7 +420,9 @@ var translations = {
     },
     fi: {
         localIP: "Paikallinen IP",
+        localIPv6: "Paikallinen IPv6",
         publicIP: "Julkinen IP",
+        publicIPv6: "Julkinen IPv6",
         loading: "Ladataan...",
         notConnected: "Ei yhteyttä internetiin",
         showCountryFlag: "Näytä maan lippu:",
@@ -407,7 +444,9 @@ var translations = {
     },
     no: {
         localIP: "Lokal IP",
+        localIPv6: "Lokal IPv6",
         publicIP: "Offentlig IP",
+        publicIPv6: "Offentlig IPv6",
         loading: "Laster...",
         notConnected: "Ikke tilkoblet internett",
         showCountryFlag: "Vis landets flagg:",
@@ -429,7 +468,9 @@ var translations = {
     },
     uk: {
         localIP: "Локальний IP",
+        localIPv6: "Локальний IPv6",
         publicIP: "Публічний IP",
+        publicIPv6: "Публічний IPv6",
         loading: "Завантаження...",
         notConnected: "Не підключено до інтернету",
         showCountryFlag: "Показати прапор країни:",
@@ -451,7 +492,9 @@ var translations = {
     },
     el: {
         localIP: "Τοπική IP",
+        localIPv6: "Τοπική IPv6",
         publicIP: "Δημόσια IP",
+        publicIPv6: "Δημόσια IPv6",
         loading: "Φόρτωση...",
         notConnected: "Δεν υπάρχει σύνδεση στο διαδίκτυο",
         showCountryFlag: "Εμφάνιση σημαίας χώρας:",
@@ -473,7 +516,9 @@ var translations = {
     },
     cs: {
         localIP: "Lokální IP",
+        localIPv6: "Lokální IPv6",
         publicIP: "Veřejná IP",
+        publicIPv6: "Veřejná IPv6",
         loading: "Načítání...",
         notConnected: "Nepřipojeno k internetu",
         showCountryFlag: "Zobrazit vlajku země:",
@@ -495,7 +540,9 @@ var translations = {
     },
     ro: {
         localIP: "IP local",
+        localIPv6: "IPv6 local",
         publicIP: "IP public",
+        publicIPv6: "IPv6 public",
         loading: "Se încarcă...",
         notConnected: "Neconectat la internet",
         showCountryFlag: "Afișează steagul țării:",
@@ -518,7 +565,9 @@ var translations = {
     },
     hu: {
         localIP: "Helyi IP",
+        localIPv6: "Helyi IPv6",
         publicIP: "Nyilvános IP",
+        publicIPv6: "Nyilvános IPv6",
         loading: "Betöltés...",
         notConnected: "Nincs internetkapcsolat",
         showCountryFlag: "Ország zászlójának megjelenítése:",
@@ -540,7 +589,9 @@ var translations = {
     },
     th: {
         localIP: "IP ภายใน",
+        localIPv6: "IPv6 ภายใน",
         publicIP: "IP สาธารณะ",
+        publicIPv6: "IPv6 สาธารณะ",
         loading: "กำลังโหลด...",
         notConnected: "ไม่ได้เชื่อมต่ออินเทอร์เน็ต",
         showCountryFlag: "แสดงธงประเทศ:",
@@ -562,7 +613,9 @@ var translations = {
     },
     id: {
         localIP: "IP Lokal",
+        localIPv6: "IPv6 Lokal",
         publicIP: "IP Publik",
+        publicIPv6: "IPv6 Publik",
         loading: "Memuat...",
         notConnected: "Tidak terhubung ke internet",
         showCountryFlag: "Tampilkan bendera negara:",
@@ -584,7 +637,9 @@ var translations = {
     },
     vi: {
         localIP: "IP cục bộ",
+        localIPv6: "IPv6 cục bộ",
         publicIP: "IP công cộng",
+        publicIPv6: "IPv6 công cộng",
         loading: "Đang tải...",
         notConnected: "Không kết nối internet",
         showCountryFlag: "Hiển thị cờ quốc gia:",
@@ -606,7 +661,9 @@ var translations = {
     },
     ms: {
         localIP: "IP Tempatan",
+        localIPv6: "IPv6 Tempatan",
         publicIP: "IP Awam",
+        publicIPv6: "IPv6 Awam",
         loading: "Sedang memuat...",
         notConnected: "Tidak disambungkan ke internet",
         showCountryFlag: "Tunjukkan bendera negara:",
@@ -628,7 +685,9 @@ var translations = {
     },
     he: {
         localIP: "IP מקומי",
+        localIPv6: "IPv6 מקומי",
         publicIP: "IP ציבורי",
+        publicIPv6: "IPv6 ציבורי",
         loading: "טוען...",
         notConnected: "לא מחובר לאינטרנט",
         showCountryFlag: "הצג דגל מדינה:",
