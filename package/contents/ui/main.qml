@@ -1,5 +1,5 @@
 /**
- * IP Address Display Plasmoid
+ * IP Address+ Display Plasmoid
  * Purpose: Displays local and public IP addresses with country flags in Plasma panel
  * Operation: Fetches and displays IP information with automatic updates
  * Usage: Helps users monitor their network connectivity and location
@@ -34,26 +34,30 @@ PlasmoidItem {
      * Usage: Referenced throughout the widget for state management
      * Interactions: Updated by various functions and user actions
      */
+
+    property int ipMode: 1 //Localv4 = 1, Localv6 = 3, Publicv4 = 4, Publicv6 = 5, VPN = 6
     readonly property string currentLocale: Qt.locale().name.split("_")[0]
-    property bool isPublicMode: false
-    property bool isLoadingIP: false
-    property bool isLoadingCountry: false
+    property bool isLoadingPublicIPv4: false
+    property bool isLoadingPublicIPv6: false
+    property bool isLoadingVPNIP: false
+    property bool isLoadingCountryv4: false
+    property bool isLoadingCountryv6: false
     property string localIP: Translations.getTranslation("loading", currentLocale)
+    property string localIPv6: ""
+    property string vpnIP: ""
+    property string vpnIP_OLD: ""
     property string publicIP: ""
     property string publicIP_OLD: ""
-    property string countryCode: ""
-    property bool showingLocalIP: true
+    property string publicIPv6: ""
+    property string publicIPv6_OLD: ""
+    property string countryCodev4: ""
+    property string countryCodev6: ""
+    property int displayedIP: 1
     readonly property bool debugMode: false
     readonly property string flagsPath: "../images/pays/"
     property bool isResuming: false
     property string customPrefix: plasmoid.configuration.customPrefix
     property string selectedInterface: plasmoid.configuration.selectedInterface
-
-    /**
-    * Country Names Mapping
-    * Purpose: Maps country codes to their full names
-    * Operation: Used for tooltip display when hovering over flags
-    */
 
     /**
      * Layout Settings
@@ -89,15 +93,18 @@ PlasmoidItem {
                 id: debugLabel
                 text: {
                     let debugInfo = [
-                        "Country: " + (countryCode || "none"),
-                        "Public: " + !showingLocalIP,
-                        "LoadingIP: " + isLoadingIP,
-                        "LoadingCountry: " + isLoadingCountry,
-                        "IP: " + (showingLocalIP ? localIP : publicIP)
+                        "Public Country v4: " + (countryCodev4 || "none"),
+                        "Current IP Mode: " + getIPMode(ipMode),
+                        "LoadingPublicIPv4: " + isLoadingPublicIPv4,
+                        "LoadingVPNIP: " + isLoadingVPNIP,
+                        "LoadingCountryv4: " + isLoadingCountryv4,
+                        "Local IP: " + localIP,
+                        "Pubilc IP: " + publicIP,
+                        "VPN IP: " + vpnIP
                     ].join(" | ")
                     return debugInfo
                 }
-                visible: debugMode && !showingLocalIP
+                visible: false//debugMode && ipMode !== 1
                 color: "#FF0000"
                 font.pointSize: 8
                 Layout.alignment: Qt.AlignVCenter
@@ -119,13 +126,27 @@ PlasmoidItem {
                     id: ipInfoColumn
                     spacing: 0
                     Layout.alignment: Qt.AlignHCenter
-                    visible: !plasmoid.configuration.showFlagOnly || showingLocalIP
+                    visible: !plasmoid.configuration.showFlagOnly || ipMode === 1
 
                     QQC2.Label {
                         id: ipTypeLabel
-                        text: showingLocalIP ?
-                            Translations.getTranslation("localIP", currentLocale) :
-                            Translations.getTranslation("publicIP", currentLocale)
+                        text: switch(ipMode) {
+                            case 1:
+                                Translations.getTranslation("localIP", currentLocale);
+                                break;
+                            case 2:
+                                Translations.getTranslation("localIPv6", currentLocale);
+                                break;
+                            case 3:
+                                Translations.getTranslation("publicIP", currentLocale);
+                                break;
+                            case 4:
+                                Translations.getTranslation("publicIPv6", currentLocale);
+                                break;
+                            case 5:
+                                Translations.getTranslation("vpnIP", currentLocale);
+                                break;
+                        }
                         font.pointSize: Math.round(Kirigami.Theme.defaultFont.pointSize * 0.8)
                         Layout.alignment: Qt.AlignHCenter
                         color: plasmoid.configuration.textColor != "" && String(plasmoid.configuration.textColor) !== "#00000000" 
@@ -139,19 +160,32 @@ PlasmoidItem {
                         id: ipAddressLabel
                         text: {
                             let ipText;
-                            if (showingLocalIP) {
+                            switch (ipMode) {
+                                case 1: //LOCALv4
                                 ipText = localIP ? localIP : plasmoid.configuration.noIPMessage;
-                            } else {
+                                    break;
+                                case 2: //LOCALv6
+                                    ipText = localIPv6 ? localIPv6 : plasmoid.configuration.noIPMessage;
+                                    break;
+                                case 3: //PUBLICv4
                                 ipText = publicIP ? publicIP : plasmoid.configuration.noIPMessage;
+                                    break;
+                                case 4: //PUBLICv6
+                                    ipText = publicIPv6 ? publicIPv6 : plasmoid.configuration.noIPMessage;
+                                    break;
+                                case 5: //VPN
+                                    ipText = vpnIP ? vpnIP : plasmoid.configuration.noIPMessage;
+                                    break;
                             }
+
                             return customPrefix ? (customPrefix + " " + ipText) : ipText;
                         }
                         Layout.alignment: Qt.AlignHCenter
                         color: {
-                            if ((!localIP && showingLocalIP) || (!publicIP && !showingLocalIP)) {
+                            if ((!localIP && displayedIP === 1) || (!publicIP && displayedIP === 3)) {
                                 return plasmoid.configuration.disconnectedTextColor;
                             }
-                            return plasmoid.configuration.textColor != "" && String(plasmoid.configuration.textColor) !== "#00000000" 
+                            return plasmoid.configuration.textColor !== "" && String(plasmoid.configuration.textColor) !== "#00000000"
                                 ? plasmoid.configuration.textColor 
                                 : Kirigami.Theme.textColor;
                         }
@@ -175,8 +209,8 @@ PlasmoidItem {
                         id: flagImage
                         anchors.fill: parent
                         source: {
-                            if (countryCode && !debugMode) {
-                                return flagsPath + countryCode.toLowerCase() + ".svg"
+                            if ((ipMode === 3 && countryCodev4 && !debugMode) || (ipMode === 4 && countryCodev6 && !debugMode)) {
+                                return (ipMode ===3 ? flagsPath + countryCodev4.toLowerCase() + ".svg" : flagsPath + countryCodev6.toLowerCase() + ".svg")
                             }
                             return ""
                         }
@@ -185,7 +219,14 @@ PlasmoidItem {
                         smooth: true
 
                         QQC2.ToolTip {
-                            text: Countries.getCountryName(countryCode)
+                            text: if (ipMode === 3) {
+                                      Countries.getCountryName(countryCodev4);
+                                  } else if (ipMode === 4) {
+                                      Countries.getCountryName(countryCodev6);
+                                  } else {
+                                      ""
+                                  }
+
                             visible: flagMouseArea.containsMouse
                             delay: 500
                         }
@@ -268,8 +309,8 @@ PlasmoidItem {
      * Usage: Called periodically and on user interaction
      * Interactions: Update widget state with retrieved data
      */
-    function getLocalIP() {
-        if (debugMode) console.log("🏠 Requesting local IP for interface:", selectedInterface)
+    function getLocalIPv4() {
+        if (debugMode) console.log("🏠 Requesting local IPv4 for interface:", selectedInterface)
         if (selectedInterface) {
             executable.exec("ip -4 addr show " + selectedInterface + " scope global | grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1")
         } else {
@@ -277,19 +318,53 @@ PlasmoidItem {
         }
     }
 
-    function getPublicIP() {
-        if (!isLoadingIP) {
+    function getLocalIPv6() {
+        if (debugMode) console.log("🏠 Requesting local IPv6 for interface:", selectedInterface)
+        if (selectedInterface) {
+            executable.exec("ip -6 addr show " + selectedInterface + " scope link | grep inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1")
+        } else {
+            executable.exec("ip -6 addr show scope link | grep inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1")
+        }
+    }
+
+    function getPublicIPv4() {
+        if (!isLoadingPublicIPv4) {
             if (debugMode) console.log("🌐 Requesting public IP")
-            isLoadingIP = true
+            isLoadingPublicIPv4 = true
             executable.exec("curl -s --max-time 5 https://api.ipify.org")
         }
     }
 
-    function getCountryCode() {
-        if (!isLoadingCountry && publicIP) {
-            if (debugMode) console.log("🌍 Requesting country code for IP:", publicIP)
-            isLoadingCountry = true
+    function getPublicIPv6() {
+        if (!isLoadingPublicIPv6) {
+            if (debugMode) console.log("🌐 Requesting public IPv6")
+            isLoadingPublicIPv6 = true
+            executable.exec("ip -6 addr show scope global | grep inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1")
+        }
+    }
+
+    function getVPNIP() {
+        if (!isLoadingVPNIP) {
+            if (debugMode) console.log("🌐 Requesting VPN IP")
+            isLoadingVPNIP = true
+            executable.exec("ifconfig tun0 | grep 'inet ' | awk '{print $2}' || ifconfig vpn0 | grep 'inet ' | awk '{print $2}'")
+        }
+    }
+
+    function getCountryCode(target) {
+        if (target === 3) { //Publicv4
+            if (!isLoadingCountryv4 && (publicIP)) {
+                if (debugMode) console.log("🌍 Requesting country code for IPv4:", publicIP)
+                isLoadingCountryv4 = true
             executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIP + "/country")
+            }
+        }
+        else { //Publicv6
+            if (!isLoadingCountryv6 && (publicIPv6)) {
+                if (debugMode) console.log("🌍 Requesting country code for IPv6:", publicIPv6)
+                isLoadingCountryv6 = true
+                executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIPv6 + "/country")
+            }
         }
     }
 
@@ -303,36 +378,97 @@ PlasmoidItem {
     Connections {
         target: executable
         function onExited(cmd, stdout, stderr) {
-            if (cmd.indexOf("ip -4 addr") !== -1) {
+            if (cmd.indexOf("grep inet | awk '{print $2}' | cut -d/ -f1 | head -n1") !== -1) {
                 localIP = stdout.trim()
-                if (debugMode) console.log("🏠 Local IP received:", localIP)
+                if (debugMode) console.log("🏠 Local IPv4 received:", localIP)
+            }
+            else if (cmd.indexOf("ip -6 addr show scope link") !== -1) {
+                localIPv6 = stdout.trim()
+                if (debugMode) console.log("🏠 Local IPv6 received:", localIPv6)
+            }
+            else if (cmd.indexOf("ip -6 addr show scope global") !== -1 ) {
+                publicIPv6 = stdout.trim()
+                if (debugMode) console.log("🏠 Public IPv6 received:", publicIPv6)
+
+                isLoadingPublicIPv6 = false
+                if (stdout.trim() !== "") {
+                    var newIPv6 = stdout.trim()
+                    // Check if IP has changed
+                    if (newIPv6 !== publicIPv6) {
+                        if (debugMode) console.log("🔄 IPv6 change detected:", publicIPv6, "->", newIPv6)
+                        publicIPv6 = newIPv6
+                        countryCodev6 = ""  // Reset country code
+                        getCountryCode(4) // Request new country code
+                    }
+                } else {
+                    publicIPv6 = ""
+                    countryCodev6 = ""
+                    if (debugMode) console.log("❌ No public IPv6 received")
+                }
+            }
+            else if (cmd.indexOf("tun") !== -1) {
+                isLoadingVPNIP = false;
+                if (stdout.trim() !== "") {
+                    var newVpnIP = stdout.trim()
+                    if (newVpnIP.indexOf("error") === -1) {
+                        if (debugMode) console.log("🏠 VPN IP received:", vpnIP)
+                        if (newVpnIP !== vpnIP) {
+                            if (debugMode) console.log("🔄 IP change detected:", vpnIP, "->", newVpnIP)
+                            vpnIP = newVpnIP
+                        }
+                    } else {
+                        if (debugMode) console.log("❌ No VPN IP received")
+                        newVpnIP = ""
+                        vpnIP = ""
+                    }
+                } else {
+                    vpnIP = ""
+                    if (debugMode) console.log("❌ No VPN IP received")
+                }
             } 
             else if (cmd.indexOf("ipify.org") !== -1) {
-                isLoadingIP = false
+                isLoadingPublicIPv4 = false
                 if (stdout.trim() !== "") {
-                    var newIP = stdout.trim()
+                    var newIPv4 = stdout.trim()
                     // Check if IP has changed
-                    if (newIP !== publicIP) {
-                        if (debugMode) console.log("🔄 IP change detected:", publicIP, "->", newIP)
-                        publicIP = newIP
-                        countryCode = ""  // Reset country code
-                        getCountryCode()  // Request new country code
+                    if (newIPv4 !== publicIP) {
+                        if (debugMode) console.log("🔄 IP change detected:", publicIP, "->", newIPv4)
+                        publicIP = newIPv4
+                        countryCodev4 = ""  // Reset country code
+                        getCountryCode(3) // Request new country code
                     }
                 } else {
                     publicIP = ""
-                    countryCode = ""
+                    countryCodev4 = ""
                     if (debugMode) console.log("❌ No public IP received")
                 }
             }
             else if (cmd.indexOf("ipapi.co") !== -1) {
-                isLoadingCountry = false
-                var newCountry = stdout.trim()
-                if (newCountry.length === 2) {
-                    countryCode = newCountry
-                    if (debugMode) console.log("🌍 Country code received:", countryCode)
+                if (isLoadingCountryv4) {
+                    isLoadingCountryv4 = false
+                    var newCountryv4 = stdout.trim()
+                    if (newCountryv4.length === 2) {
+                        countryCodev4 = newCountryv4
+                        if (debugMode) console.log("🌍 Country code received:", countryCodev4)
+                    } else {
+                        countryCodev4 = ""
+                        if (debugMode) console.log("❌ Invalid country code received")
+                    }
                 } else {
-                    countryCode = ""
+                    if (debugMode) console.log("❌ Unexpected country code response")
+                }
+                if (isLoadingCountryv6) {
+                    isLoadingCountryv6 = false
+                    var newCountryv6 = stdout.trim()
+                    if (newCountryv6.length === 2) {
+                        countryCodev6 = newCountryv6
+                        if (debugMode) console.log("🌍 Country code received:", countryCodev6)
+                    } else {
+                        countryCodev6 = ""
                     if (debugMode) console.log("❌ Invalid country code received")
+                    }
+                } else {
+                    if (debugMode) console.log("❌ Unexpected country code response")
                 }
             }
 
@@ -352,12 +488,7 @@ PlasmoidItem {
         running: true
         repeat: true
         onTriggered: {
-            if (showingLocalIP) {
-                getLocalIP()
-            } else {
-                // Check current public IP first
-                executable.exec("curl -s --max-time 5 https://api.ipify.org")
-            }
+            updateData()
         }
     }
 
@@ -369,37 +500,86 @@ PlasmoidItem {
      * Interactions: Coordinate between UI and data components
      */
     function shouldShowFlag() {
-        return (plasmoid.configuration.showFlagOnly || plasmoid.configuration.showFlag) 
-                && countryCode.length === 2
-                && !showingLocalIP
+        return ((plasmoid.configuration.showFlagOnly || plasmoid.configuration.showFlag)
+                && countryCodev4.length === 2 && ipMode === 3) || ((plasmoid.configuration.showFlagOnly || plasmoid.configuration.showFlag)
+        && countryCodev6.length === 2 && ipMode === 4);
     }
 
     function updateData() {
-        if (showingLocalIP) {
-            getLocalIP()
-        } else if (!publicIP) {
-            getPublicIP()
+        switch (ipMode) {
+            case 1: //LOCALv4
+                getLocalIPv4();
+                break;
+            case 2: //LOCALv6
+                getLocalIPv6();
+                break;
+            case 3: //PUBLICv4
+                getPublicIPv4();
+                break;
+            case 4: //PUBLICv6
+                getPublicIPv6();
+                break;
+            case 5: //VPN
+                getVPNIP();
+                break;
         }
     }
 
     function toggleIPDisplay() {
-        showingLocalIP = !showingLocalIP
+        var oldIPMode = ipMode;
+        switch (ipMode) {
+            case 1:
+                ipMode = 2;
+                break;
+            case 2:
+                ipMode = 3;
+                break;
+            case 3:
+                ipMode = 4;
+                break;
+            case 4:
+                ipMode = 5;
+                break;
+            case 5:
+                ipMode = 1;
+                break;
+        }
+
         if (debugMode) {
-            console.log("🔄 Mode change:", showingLocalIP ? "Local" : "Public")
+            console.log("🔄 Mode change:", getIPMode(oldIPMode), " --> ", getIPMode(ipMode))
         }
         updateData()
+    }
+
+    function getIPMode(currentMode) {
+        switch (currentMode) {
+            case 1:
+                return "Local v4"
+            case 2:
+                return "Local v6"
+            case 3:
+                return "Public v4"
+            case 4:
+                return "Public v6"
+            case 5:
+                return "VPN"
+        }
     }
 
     function updateDisplay() {
         if (debugMode) {
             console.log("🔄 Refreshing widget")
             console.log("📊 State:", JSON.stringify({
-                showingLocalIP: showingLocalIP,
+                currentIPMode: getIPMode(ipMode),
                 localIP: localIP,
+                localIPv6: localIPv6,
                 publicIP: publicIP,
-                countryCode: countryCode,
-                isLoadingIP: isLoadingIP,
-                isLoadingCountry: isLoadingCountry
+                publicIPv6: publicIPv6,
+                vpnIP: vpnIP,
+                countryCodev4: countryCodev4,
+                isLoadingPublicIPv4: isLoadingPublicIPv4,
+                isLoadingVPNIP: isLoadingVPNIP,
+                isLoadingCountryv4: isLoadingCountryv4
             }, null, 2))
         }
 
