@@ -13,9 +13,12 @@ import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.plasma5support 2.0 as P5Support
 import QtQuick.Controls 2.15 as QQC2
+import org.kde.kquickcontrolsaddons as KQuickControlsAddons
 import org.kde.kirigami 2.20 as Kirigami
 import "../translations/translations.js" as Translations
 import "../data/countries.js" as Countries
+
+
 
 /**
  * Main Plasmoid Container
@@ -83,6 +86,10 @@ PlasmoidItem {
         anchors.fill: parent
         spacing: 5
 
+        KQuickControlsAddons.Clipboard {
+            id: clipboard
+        }
+
         RowLayout {
             id: contentRow
             Layout.fillWidth: true
@@ -149,8 +156,8 @@ PlasmoidItem {
                         }
                         font.pointSize: Math.round(Kirigami.Theme.defaultFont.pointSize * 0.8)
                         Layout.alignment: Qt.AlignHCenter
-                        color: plasmoid.configuration.textColor != "" && String(plasmoid.configuration.textColor) !== "#00000000" 
-                            ? plasmoid.configuration.textColor 
+                        color: plasmoid.configuration.textColor != "" && String(plasmoid.configuration.textColor) !== "#00000000"
+                            ? plasmoid.configuration.textColor
                             : Kirigami.Theme.textColor
                         visible: plasmoid.configuration.showTypeLabel
                     }
@@ -162,13 +169,13 @@ PlasmoidItem {
                             let ipText;
                             switch (ipMode) {
                                 case 1: //LOCALv4
-                                ipText = localIP ? localIP : plasmoid.configuration.noIPMessage;
+                                    ipText = localIP ? localIP : plasmoid.configuration.noIPMessage;
                                     break;
                                 case 2: //LOCALv6
                                     ipText = localIPv6 ? localIPv6 : plasmoid.configuration.noIPMessage;
                                     break;
                                 case 3: //PUBLICv4
-                                ipText = publicIP ? publicIP : plasmoid.configuration.noIPMessage;
+                                    ipText = publicIP ? publicIP : plasmoid.configuration.noIPMessage;
                                     break;
                                 case 4: //PUBLICv6
                                     ipText = publicIPv6 ? publicIPv6 : plasmoid.configuration.noIPMessage;
@@ -186,7 +193,7 @@ PlasmoidItem {
                                 return plasmoid.configuration.disconnectedTextColor;
                             }
                             return plasmoid.configuration.textColor !== "" && String(plasmoid.configuration.textColor) !== "#00000000"
-                                ? plasmoid.configuration.textColor 
+                                ? plasmoid.configuration.textColor
                                 : Kirigami.Theme.textColor;
                         }
                     }
@@ -267,11 +274,11 @@ PlasmoidItem {
             exited(sourceName, stdout, stderr)
             disconnectSource(sourceName)
         }
-        
+
         function exec(cmd) {
             connectSource(cmd)
         }
-        
+
         signal exited(string cmd, string stdout, string stderr)
     }
 
@@ -279,12 +286,12 @@ PlasmoidItem {
         id: pmSource
         engine: "powermanagement"
         connectedSources: ["powerdevil"]
-        
+
         onSourceAdded: {
             disconnectSource(source);
             connectSource(source);
         }
-        
+
         onDataChanged: {
             if (data["powerdevil"] && data["powerdevil"]["Is Resuming"] === true) {
                 if (debugMode) console.log("💻 Wake from sleep detected")
@@ -356,7 +363,7 @@ PlasmoidItem {
             if (!isLoadingCountryv4 && (publicIP)) {
                 if (debugMode) console.log("🌍 Requesting country code for IPv4:", publicIP)
                 isLoadingCountryv4 = true
-            executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIP + "/country")
+                executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIP + "/country")
             }
         }
         else { //Publicv6
@@ -425,7 +432,7 @@ PlasmoidItem {
                     vpnIP = ""
                     if (debugMode) console.log("❌ No VPN IP received")
                 }
-            } 
+            }
             else if (cmd.indexOf("ipify.org") !== -1) {
                 isLoadingPublicIPv4 = false
                 if (stdout.trim() !== "") {
@@ -465,7 +472,7 @@ PlasmoidItem {
                         if (debugMode) console.log("🌍 Country code received:", countryCodev6)
                     } else {
                         countryCodev6 = ""
-                    if (debugMode) console.log("❌ Invalid country code received")
+                        if (debugMode) console.log("❌ Invalid country code received")
                     }
                 } else {
                     if (debugMode) console.log("❌ Unexpected country code response")
@@ -566,6 +573,26 @@ PlasmoidItem {
         }
     }
 
+    function copyIPAddress() {
+        switch (ipMode) {
+            case 1:
+                clipboard.content = localIP
+                break;
+            case 2:
+                clipboard.content = localIPv6
+                break;
+            case 3:
+                clipboard.content = publicIP
+                break;
+            case 4:
+                clipboard.content = publicIPv6
+                break;
+            case 5:
+                clipboard.content = vpnIP
+                break;
+        }
+    }
+
     function updateDisplay() {
         if (debugMode) {
             console.log("🔄 Refreshing widget")
@@ -604,4 +631,13 @@ PlasmoidItem {
         function onShowFlagChanged() { updateDisplay() }
         function onShowTypeLabelChanged() { updateDisplay() }
     }
+
+    Plasmoid.contextualActions: [
+            PlasmaCore.Action {
+                text: i18nc("@action", "Copy address to clipboard")
+                icon.name: "edit-copy"
+                onTriggered: copyIPAddress()
+            }
+        ]
+
 }
