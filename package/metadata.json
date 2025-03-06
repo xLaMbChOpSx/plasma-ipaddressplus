@@ -2,7 +2,11 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "xLaMbChOpSx"
+                "Name": "xLaMbChOpSx",
+                "Email": "ryanskungfu@me.com"
+            },
+            {
+                "Name": "JENNOVA"
             }
         ],
         "Category": "System Information",

@@ -18,8 +18,6 @@ import org.kde.kirigami 2.20 as Kirigami
 import "../translations/translations.js" as Translations
 import "../data/countries.js" as Countries
 
-
-
 /**
  * Main Plasmoid Container
  * Purpose: Root container managing the entire widget's state and appearance
@@ -41,7 +39,6 @@ PlasmoidItem {
     property int ipMode: 1 //Localv4 = 1, Localv6 = 3, Publicv4 = 4, Publicv6 = 5, VPN = 6
     readonly property string currentLocale: Qt.locale().name.split("_")[0]
     property bool isLoadingPublicIPv4: false
-    property bool isLoadingPublicIPv6: false
     property bool isLoadingVPNIP: false
     property bool isLoadingCountryv4: false
     property bool isLoadingCountryv6: false
@@ -156,12 +153,11 @@ PlasmoidItem {
                         }
                         font.pointSize: Math.round(Kirigami.Theme.defaultFont.pointSize * 0.8)
                         Layout.alignment: Qt.AlignHCenter
-                        color: plasmoid.configuration.textColor != "" && String(plasmoid.configuration.textColor) !== "#00000000"
+                        color: plasmoid.configuration.textColor !== "" && String(plasmoid.configuration.textColor) !== "#00000000"
                             ? plasmoid.configuration.textColor
                             : Kirigami.Theme.textColor
                         visible: plasmoid.configuration.showTypeLabel
                     }
-
 
                     QQC2.Label {
                         id: ipAddressLabel
@@ -217,11 +213,11 @@ PlasmoidItem {
                         anchors.fill: parent
                         source: {
                             if ((ipMode === 3 && countryCodev4 && !debugMode) || (ipMode === 4 && countryCodev6 && !debugMode)) {
-                                return (ipMode ===3 ? flagsPath + countryCodev4.toLowerCase() + ".svg" : flagsPath + countryCodev6.toLowerCase() + ".svg")
+                                return (ipMode === 3 ? flagsPath + countryCodev4.toLowerCase() + ".svg" : flagsPath + countryCodev6.toLowerCase() + ".svg")
                             }
                             return ""
                         }
-                        visible: !debugMode && shouldShowFlag()
+                        visible: shouldShowFlag() && !debugMode
                         fillMode: Image.PreserveAspectFit
                         smooth: true
 
@@ -229,6 +225,7 @@ PlasmoidItem {
                             text: if (ipMode === 3) {
                                       Countries.getCountryName(countryCodev4);
                                   } else if (ipMode === 4) {
+
                                       Countries.getCountryName(countryCodev6);
                                   } else {
                                       ""
@@ -244,7 +241,7 @@ PlasmoidItem {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true  // Enable hover detection
-                        onClicked: toggleIPDisplay()
+                        onClicked: toggleIPDisplay();
                     }
                 }
             }
@@ -343,11 +340,8 @@ PlasmoidItem {
     }
 
     function getPublicIPv6() {
-        if (!isLoadingPublicIPv6) {
-            if (debugMode) console.log("🌐 Requesting public IPv6")
-            isLoadingPublicIPv6 = true
-            executable.exec("ip -6 addr show scope global | grep inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1")
-        }
+        if (debugMode) console.log("🌐 Requesting public IPv6")
+        executable.exec("ip -6 addr show scope global | grep inet6 | awk '{print $2}' | cut -d/ -f1 | head -n1")
     }
 
     function getVPNIP() {
@@ -358,20 +352,19 @@ PlasmoidItem {
         }
     }
 
-    function getCountryCode(target) {
-        if (target === 3) { //Publicv4
-            if (!isLoadingCountryv4 && (publicIP)) {
-                if (debugMode) console.log("🌍 Requesting country code for IPv4:", publicIP)
-                isLoadingCountryv4 = true
-                executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIP + "/country")
-            }
+    function getCountryCodev4() {
+        if (!isLoadingCountryv4 && publicIP) {
+            if (debugMode) console.log("🌍 Requesting country code for IPv4:", publicIP)
+            isLoadingCountryv4 = true
+            executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIP + "/country")
         }
-        else { //Publicv6
-            if (!isLoadingCountryv6 && (publicIPv6)) {
-                if (debugMode) console.log("🌍 Requesting country code for IPv6:", publicIPv6)
-                isLoadingCountryv6 = true
-                executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIPv6 + "/country")
-            }
+    }
+
+    function getCountryCodev6() {
+        if (!isLoadingCountryv6 && publicIPv6) {
+            if (debugMode) console.log("🌍 Requesting country code for IPv6:", publicIPv6)
+            isLoadingCountryv6 = true
+            executable.exec("curl -s --max-time 5 https://ipapi.co/" + publicIPv6 + "/country")
         }
     }
 
@@ -394,18 +387,16 @@ PlasmoidItem {
                 if (debugMode) console.log("🏠 Local IPv6 received:", localIPv6)
             }
             else if (cmd.indexOf("ip -6 addr show scope global") !== -1 ) {
-                publicIPv6 = stdout.trim()
-                if (debugMode) console.log("🏠 Public IPv6 received:", publicIPv6)
-
-                isLoadingPublicIPv6 = false
                 if (stdout.trim() !== "") {
                     var newIPv6 = stdout.trim()
+                    if (debugMode) console.log("🏠 Public IPv6 received:", newIPv6)
+
                     // Check if IP has changed
                     if (newIPv6 !== publicIPv6) {
                         if (debugMode) console.log("🔄 IPv6 change detected:", publicIPv6, "->", newIPv6)
                         publicIPv6 = newIPv6
                         countryCodev6 = ""  // Reset country code
-                        getCountryCode(4) // Request new country code
+                        getCountryCodev6() // Request new country code
                     }
                 } else {
                     publicIPv6 = ""
@@ -442,7 +433,7 @@ PlasmoidItem {
                         if (debugMode) console.log("🔄 IP change detected:", publicIP, "->", newIPv4)
                         publicIP = newIPv4
                         countryCodev4 = ""  // Reset country code
-                        getCountryCode(3) // Request new country code
+                        getCountryCodev4() // Request new country code
                     }
                 } else {
                     publicIP = ""
@@ -450,7 +441,7 @@ PlasmoidItem {
                     if (debugMode) console.log("❌ No public IP received")
                 }
             }
-            else if (cmd.indexOf("ipapi.co") !== -1) {
+            else if (cmd.indexOf("https://ipapi.co/" + publicIP + "/country") !== -1) {
                 if (isLoadingCountryv4) {
                     isLoadingCountryv4 = false
                     var newCountryv4 = stdout.trim()
@@ -461,9 +452,9 @@ PlasmoidItem {
                         countryCodev4 = ""
                         if (debugMode) console.log("❌ Invalid country code received")
                     }
-                } else {
-                    if (debugMode) console.log("❌ Unexpected country code response")
                 }
+            }
+            else if (cmd.indexOf("https://ipapi.co/" + publicIPv6 + "/country") !== -1) {
                 if (isLoadingCountryv6) {
                     isLoadingCountryv6 = false
                     var newCountryv6 = stdout.trim()
@@ -474,11 +465,8 @@ PlasmoidItem {
                         countryCodev6 = ""
                         if (debugMode) console.log("❌ Invalid country code received")
                     }
-                } else {
-                    if (debugMode) console.log("❌ Unexpected country code response")
                 }
             }
-
             updateDisplay()
         }
     }
@@ -494,9 +482,7 @@ PlasmoidItem {
         interval: 5000
         running: true
         repeat: true
-        onTriggered: {
-            updateData()
-        }
+        onTriggered: updateData()
     }
 
     /**
@@ -552,9 +538,8 @@ PlasmoidItem {
                 break;
         }
 
-        if (debugMode) {
-            console.log("🔄 Mode change:", getIPMode(oldIPMode), " --> ", getIPMode(ipMode))
-        }
+        if (debugMode) console.log("🔄 Mode change:", getIPMode(oldIPMode), " --> ", getIPMode(ipMode))
+
         updateData()
     }
 
@@ -593,21 +578,27 @@ PlasmoidItem {
         }
     }
 
+    function currentState() {
+        console.log("📊 State:", JSON.stringify({
+            currentIPMode: getIPMode(ipMode),
+            localIP: localIP,
+            localIPv6: localIPv6,
+            publicIP: publicIP,
+            publicIPv6: publicIPv6,
+            vpnIP: vpnIP,
+            countryCodev4: countryCodev4,
+            countryCodev6: countryCodev6,
+            isLoadingPublicIPv4: isLoadingPublicIPv4,
+            isLoadingVPNIP: isLoadingVPNIP,
+            isLoadingCountryv4: isLoadingCountryv4,
+            isLoadingCountryv6: isLoadingCountryv6
+        }, null, 2))
+    }
+
     function updateDisplay() {
         if (debugMode) {
             console.log("🔄 Refreshing widget")
-            console.log("📊 State:", JSON.stringify({
-                currentIPMode: getIPMode(ipMode),
-                localIP: localIP,
-                localIPv6: localIPv6,
-                publicIP: publicIP,
-                publicIPv6: publicIPv6,
-                vpnIP: vpnIP,
-                countryCodev4: countryCodev4,
-                isLoadingPublicIPv4: isLoadingPublicIPv4,
-                isLoadingVPNIP: isLoadingVPNIP,
-                isLoadingCountryv4: isLoadingCountryv4
-            }, null, 2))
+            currentState()
         }
 
         contentLayout.Layout.preferredWidth = -1
